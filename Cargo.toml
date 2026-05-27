@@ -1,0 +1,48 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/statscore-common",
+    "crates/statscore-linalg",
+    "crates/statscore-probability",
+    "crates/statscore-distributions",
+    "crates/statscore-descriptive",
+    "crates/statscore-hypothesis",
+    "crates/statscore-regression",
+    "crates/statscore-multivariate",
+    "crates/statscore-timeseries",
+    "crates/statscore-bayesian",
+    "crates/statscore-simulation",
+    "crates/statscore-survival",
+    "crates/statscore-categorical",
+    "crates/statscore-quality",
+    "crates/statscore-information",
+    "crates/statscore-python",
+#    "crates/statscore",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/armanrasta/statscore"
+authors = ["Arman Rostami <armanrostami1382@gmail.com>"]
+
+[workspace.dependencies]
+ndarray = "0.17.2"
+ndarray-linalg = "0.18.1"
+ndarray-stats = "0.7.0"
+nalgebra = "0.34.2"
+rand = "0.10.1"
+rand_distr = "0.6.0"
+statrs = "0.18.0"
+libm = "0.2.16"
+thiserror = "2.0.18"
+num-traits = "0.2.19"
+approx = "0.6.0-rc2"
+pyo3 = { version = "0.28.3", features = ["extension-module"] }
+numpy = "0.28.0"
+serde = { version = "1.0.228", features = ["derive"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
