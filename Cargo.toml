@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "crates/statscore-common",
+    "crates/statscore-special",
     "crates/statscore-linalg",
     "crates/statscore-probability",
     "crates/statscore-distributions",
@@ -17,7 +18,7 @@ members = [
     "crates/statscore-quality",
     "crates/statscore-information",
     "crates/statscore-python",
-#    "crates/statscore",
+    #    "crates/statscore",
 ]
 
 [workspace.package]
@@ -31,7 +32,7 @@ authors = ["Arman Rostami <armanrostami1382@gmail.com>"]
 ndarray = "0.17.2"
 ndarray-linalg = "0.18.1"
 ndarray-stats = "0.7.0"
-nalgebra = "0.34.2"
+nalgebra = "0.35.0"
 rand = "0.10.1"
 rand_distr = "0.6.0"
 statrs = "0.18.0"
