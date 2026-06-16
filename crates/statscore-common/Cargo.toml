@@ -1,5 +1,6 @@
 [package]
 name = "statscore-common"
+description = "Shared traits, error types, and numeric utilities for statscore"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -11,6 +12,7 @@ thiserror = "2.0.18"
 rand = "0.10.1"
 num-traits = "0.2.19"
 ndarray = "0.17.2"
+approx = "0.5.1"
 
 [lints]
 workspace = true
