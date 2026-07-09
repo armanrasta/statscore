@@ -2,7 +2,7 @@
 
 use statscore_common::Result;
 
-use crate::matrix::{DenseMatrix, SquareMatrix};
+use crate::matrix::DenseMatrix;
 
 /// Result of a QR factorization `A = Q R`.
 #[derive(Debug, Clone, PartialEq)]
@@ -26,7 +26,7 @@ pub struct QrDecomposition {
 /// assert_eq!(qr.r.ncols(), 2);
 /// ```
 pub fn qr(matrix: &DenseMatrix) -> Result<QrDecomposition> {
-    let decomp = matrix.as_inner().qr();
+    let decomp = matrix.as_inner().clone().qr();
     Ok(QrDecomposition {
         q: DenseMatrix::from_inner(decomp.q()),
         r: DenseMatrix::from_inner(decomp.r()),
@@ -44,15 +44,21 @@ impl QrDecomposition {
     ///
     /// # Errors
     /// Returns [`statscore_common::StatsError::SingularMatrix`] if `R` is rank-deficient.
-    pub fn solve_least_squares(
-        &self,
-        b: &crate::matrix::Vector,
-    ) -> Result<crate::matrix::Vector> {
+    pub fn solve_least_squares(&self, b: &crate::matrix::Vector) -> Result<crate::matrix::Vector> {
+        if b.len() != self.q.nrows() {
+            return Err(statscore_common::StatsError::dim_mismatch(format!(
+                "expected rhs length {}, got {}",
+                self.q.nrows(),
+                b.len()
+            )));
+        }
+        // Thin QR: x = R⁻¹ Qᵀ b
+        let qt_b = self.q.as_inner().transpose() * b.as_inner();
         let x = self
             .r
             .as_inner()
-            .qr()
-            .solve(b.as_inner())
+            .clone()
+            .solve_upper_triangular(&qt_b)
             .ok_or_else(|| {
                 statscore_common::StatsError::singular("QR least-squares solve failed")
             })?;
@@ -73,11 +79,7 @@ mod tests {
         let reconstructed = decomp.reconstruct();
         for r in 0..3 {
             for c in 0..2 {
-                assert_relative_eq!(
-                    reconstructed.get(r, c),
-                    a.get(r, c),
-                    epsilon = 1e-10
-                );
+                assert_relative_eq!(reconstructed.get(r, c), a.get(r, c), epsilon = 1e-10);
             }
         }
     }

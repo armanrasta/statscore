@@ -197,7 +197,12 @@ impl fmt::Debug for SquareMatrix {
 
 impl fmt::Debug for Vector {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Vector(len = {}, data = {:?})", self.len(), self.as_slice())
+        write!(
+            f,
+            "Vector(len = {}, data = {:?})",
+            self.len(),
+            self.as_slice()
+        )
     }
 }
 

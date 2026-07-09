@@ -1,14 +1,16 @@
 //! Cholesky decomposition for positive-definite matrices.
 
+use nalgebra::Dyn;
 use statscore_common::{Result, StatsError};
 
 use crate::matrix::{SquareMatrix, Vector};
 
 /// Result of a successful Cholesky factorization `A = L Lᵀ`.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct CholeskyDecomposition {
     /// Lower-triangular factor with positive diagonal.
     pub l: SquareMatrix,
+    factor: nalgebra::Cholesky<f64, Dyn>,
 }
 
 /// Compute the Cholesky decomposition of a symmetric positive-definite matrix.
@@ -19,7 +21,7 @@ pub struct CholeskyDecomposition {
 /// # Example
 /// ```
 /// use statscore_linalg::decompositions::cholesky;
-/// use statscore_linalg::matrix::{identity, SquareMatrix};
+/// use statscore_linalg::matrix::identity;
 ///
 /// let a = identity(3);
 /// let chol = cholesky(&a).unwrap();
@@ -28,10 +30,12 @@ pub struct CholeskyDecomposition {
 pub fn cholesky(matrix: &SquareMatrix) -> Result<CholeskyDecomposition> {
     let factor = matrix
         .as_inner()
+        .clone()
         .cholesky()
         .ok_or_else(|| StatsError::not_positive_definite("Cholesky decomposition failed"))?;
     Ok(CholeskyDecomposition {
         l: SquareMatrix::from_inner_unchecked(factor.l().clone()),
+        factor,
     })
 }
 
@@ -48,21 +52,7 @@ impl CholeskyDecomposition {
                 b.len()
             )));
         }
-        // The L factor is already lower-triangular from a valid Cholesky.
-        // Use forward and backward solve directly.
-        let l = self.l.as_inner();
-        // Solve L y = b (forward substitution)
-        let y = l
-            .clone()
-            .lower_triangle()
-            .solve_lower_triangular(b.as_inner())
-            .map_err(|_| StatsError::singular("Cholesky forward solve failed"))?;
-        // Solve Lᵗ x = y (backward substitution)
-        let x = l
-            .transpose()
-            .lower_triangle()
-            .solve_lower_triangular(&y)
-            .map_err(|_| StatsError::singular("Cholesky backward solve failed"))?;
+        let x = self.factor.solve(b.as_inner());
         Ok(Vector::from_inner(x))
     }
 
@@ -70,7 +60,7 @@ impl CholeskyDecomposition {
     #[must_use]
     pub fn reconstruct(&self) -> SquareMatrix {
         let l = self.l.as_inner();
-        SquareMatrix::from_inner_unchecked(&(l * l.transpose()))
+        SquareMatrix::from_inner_unchecked(l * l.transpose())
     }
 }
 

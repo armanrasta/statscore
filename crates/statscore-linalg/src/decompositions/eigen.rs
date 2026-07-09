@@ -31,7 +31,7 @@ pub fn eigen_symmetric(matrix: &SquareMatrix) -> Result<EigenDecomposition> {
     if matrix.dim() == 0 {
         return Err(StatsError::domain("matrix dimension must be positive"));
     }
-    let decomp = matrix.as_inner().symmetric_eigen();
+    let decomp = matrix.as_inner().clone().symmetric_eigen();
     Ok(EigenDecomposition {
         eigenvalues: decomp.eigenvalues.as_slice().to_vec(),
         eigenvectors: DenseMatrix::from_inner(decomp.eigenvectors),
@@ -42,11 +42,10 @@ impl EigenDecomposition {
     /// Reconstruct `A = Q Λ Qᵀ`.
     #[must_use]
     pub fn reconstruct(&self) -> SquareMatrix {
-        let lambda = nalgebra::DMatrix::from_diagonal(&nalgebra::DVector::from_row_slice(
-            &self.eigenvalues,
-        ));
+        let lambda =
+            nalgebra::DMatrix::from_diagonal(&nalgebra::DVector::from_row_slice(&self.eigenvalues));
         let q = self.eigenvectors.as_inner();
-        SquareMatrix::from_inner_unchecked(&(q * lambda * q.transpose()))
+        SquareMatrix::from_inner_unchecked(q * lambda * q.transpose())
     }
 }
 

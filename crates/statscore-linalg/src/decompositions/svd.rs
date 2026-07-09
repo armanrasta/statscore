@@ -27,7 +27,7 @@ pub struct SvdDecomposition {
 /// assert_eq!(svd.singular_values.len(), 2);
 /// ```
 pub fn svd(matrix: &DenseMatrix) -> Result<SvdDecomposition> {
-    let decomp = matrix.as_inner().svd(true, true);
+    let decomp = matrix.as_inner().clone().svd(true, true);
     let u = decomp
         .u
         .ok_or_else(|| statscore_common::StatsError::numerical("svd", "U factor missing"))?;
@@ -81,11 +81,7 @@ mod tests {
         let reconstructed = decomp.reconstruct();
         for r in 0..3 {
             for c in 0..2 {
-                assert_relative_eq!(
-                    reconstructed.get(r, c),
-                    a.get(r, c),
-                    epsilon = 1e-9
-                );
+                assert_relative_eq!(reconstructed.get(r, c), a.get(r, c), epsilon = 1e-9);
             }
         }
     }

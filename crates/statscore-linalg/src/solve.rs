@@ -2,7 +2,7 @@
 
 use statscore_common::{Result, StatsError};
 
-use crate::decompositions::cholesky;
+use crate::decompositions::{cholesky, qr};
 use crate::matrix::{DenseMatrix, SquareMatrix, Vector};
 
 /// Solve the square linear system `A x = b`.
@@ -40,6 +40,7 @@ pub fn solve_linear_system(a: &SquareMatrix, b: &Vector) -> Result<Vector> {
 
     let lu = a
         .as_inner()
+        .clone()
         .lu()
         .solve(b.as_inner())
         .ok_or_else(|| StatsError::singular("LU solve failed: matrix is singular"))?;
@@ -58,12 +59,7 @@ pub fn solve_least_squares(a: &DenseMatrix, b: &Vector) -> Result<Vector> {
             b.len()
         )));
     }
-    let x = a
-        .as_inner()
-        .qr()
-        .solve(b.as_inner())
-        .ok_or_else(|| StatsError::singular("least-squares solve failed"))?;
-    Ok(Vector::from_inner(x))
+    qr(a)?.solve_least_squares(b)
 }
 
 #[cfg(test)]

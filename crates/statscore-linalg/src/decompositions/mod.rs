@@ -5,7 +5,7 @@ mod eigen;
 mod qr;
 mod svd;
 
-pub use cholesky::{cholesky, CholeskyDecomposition};
-pub use eigen::{eigen_symmetric, EigenDecomposition};
-pub use qr::{qr, QrDecomposition};
-pub use svd::{svd, SvdDecomposition};
+pub use cholesky::{CholeskyDecomposition, cholesky};
+pub use eigen::{EigenDecomposition, eigen_symmetric};
+pub use qr::{QrDecomposition, qr};
+pub use svd::{SvdDecomposition, svd};

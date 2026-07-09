@@ -63,7 +63,9 @@ pub fn from_row_slice(rows: usize, cols: usize, data: &[f64]) -> Result<DenseMat
             data.len()
         )));
     }
-    Ok(DenseMatrix::from_inner(NaDMatrix::from_row_slice(rows, cols, data)))
+    Ok(DenseMatrix::from_inner(NaDMatrix::from_row_slice(
+        rows, cols, data,
+    )))
 }
 
 /// Build an `n × n` square matrix from a row-major slice.
