@@ -17,6 +17,10 @@
 //! - Descriptive statistics → `statscore-descriptive`
 //! - Any distribution implementations → `statscore-distributions`
 
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for what lives here and what does not.
+
 #![warn(missing_docs)]
 #![forbid(unsafe_code)]
 

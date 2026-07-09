@@ -1,14 +1,30 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! # `statscore-distributions`
+//!
+//! Probability distributions for the `statscore` workspace. Every distribution
+//! implements [`ContinuousDistribution`] or [`DiscreteDistribution`] from
+//! [`statscore-common`].
+//!
+//! ## Planned modules
+//! - `continuous` — Normal, Student-t, χ², F, Beta, Gamma, Exponential, …
+//! - `discrete` — Binomial, Poisson, Negative binomial, Geometric, …
+//! - `multivariate` — Multivariate normal, Dirichlet, Wishart, Multivariate t
+//!
+//! ## Dependencies
+//! - [`statscore-common`] — distribution traits
+//! - [`statscore-special`] — gamma, beta, erf, bessel
+//! - [`statscore-linalg`] — Cholesky for multivariate normal
+//! - [`statscore-probability`] — moment identities
+//!
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for planned modules and status.
+//!
+//! ## Status
+//! Scaffold crate — implementation pending (Phase 1 MVP).
+//!
+//! [`ContinuousDistribution`]: statscore_common::ContinuousDistribution
+//! [`DiscreteDistribution`]: statscore_common::DiscreteDistribution
+//! [`statscore-common`]: https://docs.rs/statscore-common
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+#![warn(missing_docs)]
+#![forbid(unsafe_code)]

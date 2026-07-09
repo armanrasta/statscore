@@ -1,5 +1,6 @@
 [package]
 name = "statscore-multivariate"
+description = "Multivariate analysis: PCA, clustering, LDA, and MANOVA"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

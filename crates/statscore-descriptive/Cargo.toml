@@ -1,5 +1,6 @@
 [package]
 name = "statscore-descriptive"
+description = "Descriptive statistics: univariate, bivariate, rank, and robust estimators"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

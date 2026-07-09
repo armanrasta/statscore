@@ -1,14 +1,25 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! # `statscore-compute`
+//!
+//! Optional hardware acceleration backends for `statscore`. Feature-gated so
+//! the core library compiles everywhere without CUDA/Metal/wgpu installed.
+//!
+//! ## Planned features
+//! - `cuda` — NVIDIA CUDA via `cudarc`
+//! - `metal` — Apple Metal (macOS/iOS)
+//! - `wgpu` — cross-platform GPU compute
+//!
+//! ## Dependencies
+//! - [`statscore-common`] — types and errors
+//! - `rayon` — CPU parallel fallback
+//!
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for planned modules and status.
+//!
+//! ## Status
+//! Scaffold crate — implementation pending (post-1.0).
+//!
+//! [`statscore-common`]: https://docs.rs/statscore-common
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+#![warn(missing_docs)]
+#![forbid(unsafe_code)]

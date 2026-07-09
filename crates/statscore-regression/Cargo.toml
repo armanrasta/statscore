@@ -1,5 +1,6 @@
 [package]
 name = "statscore-regression"
+description = "Regression models: OLS, GLM, Ridge, Lasso, and diagnostics"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

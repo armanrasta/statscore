@@ -1,5 +1,6 @@
 [package]
 name = "statscore-timeseries"
+description = "Time series analysis: ARIMA, smoothing, and stationarity tests"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

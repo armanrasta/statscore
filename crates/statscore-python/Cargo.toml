@@ -1,5 +1,6 @@
 [package]
 name = "statscore-python"
+description = "Python bindings for statscore via PyO3"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

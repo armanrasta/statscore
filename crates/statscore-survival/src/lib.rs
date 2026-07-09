@@ -1,14 +1,27 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! # `statscore-survival`
+//!
+//! Survival analysis: Kaplan–Meier estimation, Cox proportional hazards,
+//! log-rank tests, and parametric survival models.
+//!
+//! ## Planned modules
+//! - `kaplan_meier` — product-limit estimator
+//! - `cox` — proportional hazards regression
+//! - `log_rank` — log-rank test
+//! - `parametric` — Weibull and exponential survival models
+//!
+//! ## Dependencies
+//! - [`statscore-common`] — types and errors
+//! - [`statscore-distributions`] — Weibull, exponential distributions
+//! - [`statscore-regression`] — Cox regression infrastructure
+//!
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for planned modules and status.
+//!
+//! ## Status
+//! Scaffold crate — implementation pending (Phase 3).
+//!
+//! [`statscore-common`]: https://docs.rs/statscore-common
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+#![warn(missing_docs)]
+#![forbid(unsafe_code)]

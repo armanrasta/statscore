@@ -1,14 +1,24 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! # `statscore-quality`
+//!
+//! Statistical process control: Shewhart control charts, CUSUM, EWMA, and
+//! process capability indices.
+//!
+//! ## Planned modules
+//! - `control_charts` — X̄-R, X̄-S, p, c, u charts, CUSUM, EWMA
+//! - `capability` — Cp, Cpk, Pp, Ppk, Cpm
+//!
+//! ## Dependencies
+//! - [`statscore-common`] — types and errors
+//! - [`statscore-distributions`] — control limit distributions
+//!
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for planned modules and status.
+//!
+//! ## Status
+//! Scaffold crate — implementation pending (Phase 3).
+//!
+//! [`statscore-common`]: https://docs.rs/statscore-common
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+#![warn(missing_docs)]
+#![forbid(unsafe_code)]

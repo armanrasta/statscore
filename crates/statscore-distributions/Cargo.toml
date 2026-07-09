@@ -1,5 +1,6 @@
 [package]
 name = "statscore-distributions"
+description = "Probability distributions: continuous, discrete, and multivariate"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

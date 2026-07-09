@@ -1,5 +1,6 @@
 [package]
 name = "statscore-survival"
+description = "Survival analysis: Kaplan-Meier, Cox regression, and log-rank tests"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

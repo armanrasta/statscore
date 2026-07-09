@@ -1,6 +1,6 @@
 [package]
 name = "statscore-compute"
-description = "Hardware acceleration backends for statscore (CUDA, # for later Metal & wgpu)"
+description = "Optional hardware acceleration backends (CUDA, Metal, wgpu)"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

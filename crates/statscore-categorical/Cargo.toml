@@ -1,5 +1,6 @@
 [package]
 name = "statscore-categorical"
+description = "Categorical data analysis: contingency tables and agreement statistics"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

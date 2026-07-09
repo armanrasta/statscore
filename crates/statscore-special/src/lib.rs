@@ -21,7 +21,10 @@
 //! - [`combinatorics`] — `ln_factorial`, `factorial`, `ln_choose`, `choose`,
 //!   `ln_perm`
 //!
-//! ## Example
+//! ## Guide
+//!
+//! See the [crate guide](docs/README.md) for module overview, accuracy targets,
+//! and examples.
 //! ```
 //! use statscore_special::gamma::gamma;
 //! use statscore_special::erf::erf;
