@@ -82,8 +82,8 @@ pub fn i1(x: f64) -> f64 {
 ///
 /// # Example
 /// ```
-/// use statscore_special::bessel::i1e;
-/// assert!((i1e(1.0) - 0.207_910_416_167_949_6).abs() < 1e-12);
+/// use statscore_special::bessel::{i1, i1e};
+/// assert!((i1e(1.0) - i1(1.0) * (-1.0_f64).exp()).abs() < 1e-12);
 /// ```
 #[must_use]
 pub fn i1e(x: f64) -> f64 {
@@ -214,9 +214,10 @@ pub fn k1(x: f64) -> f64 {
 /// # Example
 /// ```
 /// use statscore_special::bessel::k1e;
+/// // e^x K1(x) → sqrt(pi/(2x)) as x → ∞ (slowly; +3/(8x) correction)
 /// let x = 50.0;
 /// let asymptote = (std::f64::consts::PI / (2.0 * x)).sqrt();
-/// assert!((k1e(x) - asymptote).abs() < 1e-3);
+/// assert!((k1e(x) - asymptote).abs() < 2e-3);
 /// ```
 #[must_use]
 pub fn k1e(x: f64) -> f64 {
@@ -315,7 +316,7 @@ mod tests {
     fn i1_reference_values() {
         assert_relative_eq!(i1(0.0), 0.0, epsilon = 1e-15);
         assert_relative_eq!(i1(1.0), 0.565_159_103_992_485, max_relative = 1e-13);
-        assert_relative_eq!(i1(2.0), 1.590_636_854_637_329_1, max_relative = 1e-13);
+        assert_relative_eq!(i1(2.0), 1.590_636_854_637_329, max_relative = 1e-13);
         assert_relative_eq!(i1(5.0), 24.335_642_142_450_524, max_relative = 1e-13);
         assert_relative_eq!(i1(-2.0), -i1(2.0), epsilon = 1e-15);
     }

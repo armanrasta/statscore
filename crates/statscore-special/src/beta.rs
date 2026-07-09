@@ -65,7 +65,7 @@ const FPMIN: f64 = 1e-300;
 /// ```
 #[must_use]
 pub fn betainc(a: f64, b: f64, x: f64) -> f64 {
-    if a <= 0.0 || b <= 0.0 || x < 0.0 || x > 1.0 || a.is_nan() || b.is_nan() || x.is_nan() {
+    if a <= 0.0 || b <= 0.0 || !(0.0..=1.0).contains(&x) || a.is_nan() || b.is_nan() || x.is_nan() {
         return f64::NAN;
     }
     if x == 0.0 || x == 1.0 {
@@ -152,7 +152,7 @@ fn beta_cf(a: f64, b: f64, x: f64) -> f64 {
 /// ```
 #[must_use]
 pub fn betaincinv(a: f64, b: f64, p: f64) -> f64 {
-    if a <= 0.0 || b <= 0.0 || p < 0.0 || p > 1.0 || a.is_nan() || b.is_nan() || p.is_nan() {
+    if a <= 0.0 || b <= 0.0 || !(0.0..=1.0).contains(&p) || a.is_nan() || b.is_nan() || p.is_nan() {
         return f64::NAN;
     }
     if p == 0.0 || p == 1.0 {
@@ -180,7 +180,11 @@ pub fn betaincinv(a: f64, b: f64, p: f64) -> f64 {
         // Newton candidate: x - f(x)/f'(x), f'(x) = pdf of Beta(a,b).
         let ln_pdf = (a - 1.0) * x.ln() + (b - 1.0) * (1.0 - x).ln() - ln_beta_ab;
         let deriv = ln_pdf.exp();
-        let newton = if deriv > 0.0 { x - err / deriv } else { f64::NAN };
+        let newton = if deriv > 0.0 {
+            x - err / deriv
+        } else {
+            f64::NAN
+        };
 
         x = if newton.is_finite() && newton > lo && newton < hi {
             newton
@@ -233,8 +237,8 @@ mod tests {
         assert_relative_eq!(betainc(2.0, 3.0, 0.5), 0.6875, max_relative = 1e-12);
         // scipy.special.betainc(0.5, 0.5, 0.5) = 0.5
         assert_relative_eq!(betainc(0.5, 0.5, 0.5), 0.5, epsilon = 1e-12);
-        // scipy.special.betainc(2, 5, 0.3) = 0.7443100000000001
-        assert_relative_eq!(betainc(2.0, 5.0, 0.3), 0.744_31, max_relative = 1e-11);
+        // scipy.special.betainc(2, 5, 0.3) = 0.5798250000000001
+        assert_relative_eq!(betainc(2.0, 5.0, 0.3), 0.579_825, max_relative = 1e-11);
     }
 
     #[test]

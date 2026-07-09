@@ -135,7 +135,11 @@ mod tests {
         assert_eq!(ln_factorial(0), 0.0);
         assert_relative_eq!(ln_factorial(10), 3_628_800.0_f64.ln(), max_relative = 1e-13);
         // ln(100!) = 363.7393755555635 (SciPy gammaln(101))
-        assert_relative_eq!(ln_factorial(100), 363.739_375_555_563_5, max_relative = 1e-13);
+        assert_relative_eq!(
+            ln_factorial(100),
+            363.739_375_555_563_5,
+            max_relative = 1e-13
+        );
     }
 
     #[test]

@@ -5,8 +5,7 @@
 //! - [`erf_inv`] / [`erfc_inv`] use a rational first guess refined by two
 //!   Halley steps, reaching full double precision.
 
-/// 2/√π, the derivative constant d/dx erf(x) = (2/√π) e^{−x²}.
-const TWO_OVER_SQRT_PI: f64 = 1.128_379_167_095_512_6;
+use std::f64::consts::FRAC_2_SQRT_PI;
 
 /// The error function erf(x) = (2/√π) ∫₀ˣ e^{−t²} dt.
 ///
@@ -67,7 +66,7 @@ pub fn erf_inv(y: f64) -> f64 {
 /// ```
 #[must_use]
 pub fn erfc_inv(p: f64) -> f64 {
-    if p.is_nan() || p < 0.0 || p > 2.0 {
+    if p.is_nan() || !(0.0..=2.0).contains(&p) {
         return f64::NAN;
     }
     if p == 0.0 {
@@ -88,7 +87,7 @@ pub fn erfc_inv(p: f64) -> f64 {
     // Two Halley iterations refine to full precision.
     for _ in 0..2 {
         let err = erfc(x) - pp;
-        x += err / (TWO_OVER_SQRT_PI * (-x * x).exp() - x * err);
+        x += err / (FRAC_2_SQRT_PI * (-x * x).exp() - x * err);
     }
 
     if p < 1.0 { x } else { -x }

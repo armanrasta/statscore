@@ -41,7 +41,7 @@ pub mod gamma;
 
 // ── Flat re-exports for ergonomic imports ────────────────────────────────────
 
-pub use gamma::{digamma, gamma, gammainc, gammaincc, ln_gamma, trigamma};
+pub use gamma::{EULER_GAMMA, digamma, gamma, gammainc, gammaincc, ln_gamma, trigamma};
 
 pub use beta::{beta, betainc, betaincinv, ln_beta};
 

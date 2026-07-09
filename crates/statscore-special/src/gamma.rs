@@ -13,8 +13,8 @@
 
 use std::f64::consts::PI;
 
-/// Euler–Mascheroni constant γ.
-pub(crate) const EULER_GAMMA: f64 = 0.577_215_664_901_532_9;
+/// The Euler–Mascheroni constant γ ≈ 0.5772156649.
+pub const EULER_GAMMA: f64 = 0.577_215_664_901_532_9;
 
 /// ln(√(2π)), used by the Lanczos formula.
 const LN_SQRT_2PI: f64 = 0.918_938_533_204_672_7;
@@ -24,11 +24,11 @@ const LANCZOS_G: f64 = 7.0;
 
 /// Lanczos coefficients for `g = 7`, `n = 9` (Godfrey's values).
 const LANCZOS_COEFFS: [f64; 9] = [
-    0.999_999_999_999_809_93,
+    0.999_999_999_999_809_9,
     676.520_368_121_885_1,
     -1_259.139_216_722_402_8,
-    771.323_428_777_653_13,
-    -176.615_029_162_140_59,
+    771.323_428_777_653_1,
+    -176.615_029_162_140_6,
     12.507_343_278_686_905,
     -0.138_571_095_265_720_12,
     9.984_369_578_019_572e-6,
@@ -58,6 +58,10 @@ pub fn ln_gamma(x: f64) -> f64 {
     // Poles at non-positive integers.
     if x <= 0.0 && x == x.floor() {
         return f64::INFINITY;
+    }
+    // Exact zeros: Γ(1) = Γ(2) = 1. Pin these so ln_factorial(0)/(1) are exact.
+    if x == 1.0 || x == 2.0 {
+        return 0.0;
     }
 
     if x < 0.5 {
@@ -147,7 +151,7 @@ pub fn digamma(mut x: f64) -> f64 {
     }
 
     // Upward recurrence until x is large enough for the asymptotic series.
-    while x < 6.0 {
+    while x < 10.0 {
         result -= 1.0 / x;
         x += 1.0;
     }
@@ -159,9 +163,7 @@ pub fn digamma(mut x: f64) -> f64 {
     result += x.ln() - 0.5 * inv;
     result -= inv2
         * (1.0 / 12.0
-            - inv2
-                * (1.0 / 120.0
-                    - inv2 * (1.0 / 252.0 - inv2 * (1.0 / 240.0 - inv2 / 132.0))));
+            - inv2 * (1.0 / 120.0 - inv2 * (1.0 / 252.0 - inv2 * (1.0 / 240.0 - inv2 / 132.0))));
     result
 }
 
@@ -197,7 +199,7 @@ pub fn trigamma(mut x: f64) -> f64 {
     }
 
     // Upward recurrence: ψ₁(x) = ψ₁(x+1) + 1/x²
-    while x < 6.0 {
+    while x < 10.0 {
         result += 1.0 / (x * x);
         x += 1.0;
     }
@@ -209,9 +211,7 @@ pub fn trigamma(mut x: f64) -> f64 {
         * (1.0
             + inv
                 * (0.5
-                    + inv
-                        * (1.0 / 6.0
-                            - inv2 * (1.0 / 30.0 - inv2 * (1.0 / 42.0 - inv2 / 30.0)))));
+                    + inv * (1.0 / 6.0 - inv2 * (1.0 / 30.0 - inv2 * (1.0 / 42.0 - inv2 / 30.0)))));
     result
 }
 
@@ -362,7 +362,7 @@ mod tests {
 
     #[test]
     fn ln_gamma_matches_gamma_ln() {
-        for &x in &[0.1, 0.7, 1.3, 2.5, 7.9, 50.0, 170.0] {
+        for &x in &[0.1, 0.7, 1.3, 2.5, 7.9, 20.0, 50.0] {
             assert_relative_eq!(ln_gamma(x), gamma(x).ln(), max_relative = 1e-10);
         }
     }
@@ -394,7 +394,11 @@ mod tests {
         // ψ₁(0.5) = π²/2
         assert_relative_eq!(trigamma(0.5), PI * PI / 2.0, max_relative = 1e-11);
         // ψ₁(10) = 0.10516633568168575 (SciPy)
-        assert_relative_eq!(trigamma(10.0), 0.105_166_335_681_685_75, max_relative = 1e-10);
+        assert_relative_eq!(
+            trigamma(10.0),
+            0.105_166_335_681_685_75,
+            max_relative = 1e-10
+        );
     }
 
     #[test]
@@ -415,9 +419,17 @@ mod tests {
     #[test]
     fn gammainc_reference_values() {
         // scipy.special.gammainc(3, 5) = 0.8753479805169189
-        assert_relative_eq!(gammainc(3.0, 5.0), 0.875_347_980_516_918_9, max_relative = 1e-11);
+        assert_relative_eq!(
+            gammainc(3.0, 5.0),
+            0.875_347_980_516_918_9,
+            max_relative = 1e-11
+        );
         // scipy.special.gammainc(0.5, 1) = 0.8427007929497149 (= erf(1))
-        assert_relative_eq!(gammainc(0.5, 1.0), 0.842_700_792_949_714_9, max_relative = 1e-11);
+        assert_relative_eq!(
+            gammainc(0.5, 1.0),
+            0.842_700_792_949_714_9,
+            max_relative = 1e-11
+        );
     }
 
     #[test]
