@@ -1,5 +1,6 @@
 [package]
 name = "statscore-special"
+description = "Special mathematical functions: gamma, beta, erf, bessel, combinatorics"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -7,6 +8,10 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
+libm = { workspace = true }
+
+[dev-dependencies]
+approx = "0.5.1"
 
 [lints]
 workspace = true

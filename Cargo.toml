@@ -18,6 +18,7 @@ members = [
     "crates/statscore-quality",
     "crates/statscore-information",
     "crates/statscore-python",
+    "crates/statscore-compute",
     #    "crates/statscore",
 ]
 
@@ -29,6 +30,24 @@ repository = "https://github.com/armanrasta/statscore"
 authors = ["Arman Rostami <armanrostami1382@gmail.com>"]
 
 [workspace.dependencies]
+statscore-common        = { path = "crates/statscore-common" }
+statscore-special       = { path = "crates/statscore-special" }
+statscore-linalg        = { path = "crates/statscore-linalg" }
+statscore-probability   = { path = "crates/statscore-probability" }
+statscore-distributions = { path = "crates/statscore-distributions" }
+statscore-descriptive   = { path = "crates/statscore-descriptive" }
+statscore-hypothesis    = { path = "crates/statscore-hypothesis" }
+statscore-regression    = { path = "crates/statscore-regression" }
+statscore-multivariate  = { path = "crates/statscore-multivariate" }
+statscore-timeseries    = { path = "crates/statscore-timeseries" }
+statscore-bayesian      = { path = "crates/statscore-bayesian" }
+statscore-simulation    = { path = "crates/statscore-simulation" }
+statscore-survival      = { path = "crates/statscore-survival" }
+statscore-categorical   = { path = "crates/statscore-categorical" }
+statscore-quality       = { path = "crates/statscore-quality" }
+statscore-information   = { path = "crates/statscore-information" }
+statscore-compute       = { path = "crates/statscore-compute" }
+
 ndarray = "0.17.2"
 ndarray-linalg = "0.18.1"
 ndarray-stats = "0.7.0"
