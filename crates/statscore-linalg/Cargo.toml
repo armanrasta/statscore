@@ -1,5 +1,6 @@
 [package]
 name = "statscore-linalg"
+description = "Statistical linear algebra: decompositions, solvers, matrix properties"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -7,6 +8,19 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
+statscore-common = { workspace = true }
+nalgebra = { workspace = true }
+num-traits = { workspace = true }
+
+[features]
+default = []
+blas = ["nalgebra/blas"]
+openblas = ["blas", "nalgebra/openblas"]
+mkl = ["blas", "nalgebra/mkl"]
+
+[dev-dependencies]
+approx = "0.5.1"
+rand = { workspace = true }
 
 [lints]
 workspace = true
