@@ -1,0 +1,21 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "statscore"
+version = "0.1.0"
+description = "High-performance statistical library (Rust core, Python bindings)"
+requires-python = ">=3.9"
+license = { text = "MIT OR Apache-2.0" }
+authors = [{ name = "Arman Rostami" }]
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[tool.maturin]
+manifest-path = "Cargo.toml"
+module-name = "statscore"
+features = ["pyo3/extension-module"]

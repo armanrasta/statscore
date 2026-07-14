@@ -7,7 +7,15 @@ license.workspace = true
 repository.workspace = true
 authors.workspace = true
 
+[lib]
+name = "statscore"
+crate-type = ["cdylib"]
+
 [dependencies]
+statscore-common = { workspace = true }
+statscore-distributions = { workspace = true }
+pyo3 = { workspace = true }
+rand = { workspace = true }
 
 [lints]
 workspace = true
