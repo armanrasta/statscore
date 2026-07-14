@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import numpy as np
+
 import statscore
 from statscore.distributions import (
     Beta,
@@ -29,12 +31,14 @@ def section(title: str) -> None:
 def main() -> None:
     print(f"statscore {statscore.__version__}")
 
-    section("Normal(0, 1)")
+    section("Normal(0, 1) — scalar + NumPy")
     n = standard_normal()
     print(f"  pdf(0)     = {n.pdf(0.0):.12f}")
     print(f"  cdf(1.96)  = {n.cdf(1.96):.12f}")
     print(f"  ppf(0.975) = {n.ppf(0.975):.12f}")
     print(f"  mean/var   = {n.mean()}, {n.var()}")
+    x = np.linspace(-2, 2, 5)
+    print(f"  pdf(x)     = {n.pdf(x)}")
     print(f"  rvs(5)     = {n.rvs(5)}")
 
     section("Gamma(2, 2)  [shape, scale]")
@@ -74,6 +78,7 @@ def main() -> None:
     print(f"  pmf(6)     = {bn.pmf(6):.12f}")
     print(f"  cdf(6)     = {bn.cdf(6):.12f}")
     print(f"  ppf(0.5)   = {bn.ppf(0.5)}")
+    print(f"  pmf(0..5)  = {bn.pmf(np.arange(6))}")
     print(f"  rvs(8)     = {bn.rvs(8)}")
 
     section("Poisson(λ=4)")

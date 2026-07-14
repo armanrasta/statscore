@@ -1,7 +1,8 @@
 //! # `statscore-python`
 //!
 //! Python bindings for the `statscore` workspace via PyO3. Bindings ship
-//! **in parallel with each Rust crate**.
+//! **in parallel with each Rust crate**. The Python package depends on
+//! **NumPy**; methods accept scalars or arrays.
 //!
 //! ## Modules
 //! - [`distributions`] — Normal, Gamma, Binomial, …
@@ -12,15 +13,18 @@
 //!
 //! ## Example
 //! ```ignore
+//! import numpy as np
 //! import statscore
 //! from statscore.distributions import Normal
 //! dist = Normal(0.0, 1.0)
-//! print(dist.cdf(1.96))
+//! print(dist.cdf(1.96))              # float → float
+//! print(dist.pdf(np.linspace(-1, 1, 5)))  # ndarray → ndarray
 //! ```
 
 #![warn(missing_docs)]
 #![allow(unsafe_code)] // required by PyO3 extension modules
 
+mod convert;
 mod distributions;
 mod error;
 

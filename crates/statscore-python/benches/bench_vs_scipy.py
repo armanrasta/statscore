@@ -98,27 +98,17 @@ def main() -> None:
     row("Poisson.pmf(4)", timed(lambda: p.pmf(4)), timed(lambda: sp.pmf(4)))
     row("Poisson.cdf(4)", timed(lambda: p.cdf(4)), timed(lambda: sp.cdf(4)))
 
-    # Batch PDF/CDF (Python loops vs SciPy vectorized — SciPy should win here until
-    # we expose ndarray/numpy bindings; still useful as a baseline)
+    # Batch PDF/CDF — single NumPy call both sides
     xs = np.linspace(-5.0, 5.0, 10_000)
-    xs_list = xs.tolist()
-
-    def ss_pdf_loop() -> None:
-        for x in xs_list:
-            n.pdf(x)
-
-    def ss_cdf_loop() -> None:
-        for x in xs_list:
-            n.cdf(x)
 
     row(
-        "Normal.pdf ×10k (Python loop)",
-        timed(ss_pdf_loop, repeats=5),
+        "Normal.pdf ×10k (ndarray)",
+        timed(lambda: n.pdf(xs), repeats=5),
         timed(lambda: sn.pdf(xs), repeats=5),
     )
     row(
-        "Normal.cdf ×10k (Python loop)",
-        timed(ss_cdf_loop, repeats=5),
+        "Normal.cdf ×10k (ndarray)",
+        timed(lambda: n.cdf(xs), repeats=5),
         timed(lambda: sn.cdf(xs), repeats=5),
     )
 
@@ -138,7 +128,7 @@ def main() -> None:
     print()
     print("Notes:")
     print("  • Scalar ops: pure-Rust via PyO3 vs SciPy (C/Fortran).")
-    print("  • Batch ×10k: Python for-loop into Rust vs SciPy NumPy vectorization.")
+    print("  • Batch ×10k: one FFI call over a NumPy buffer vs SciPy vectorization.")
     print("  • Speedup > 1 means statscore is faster.")
 
 
