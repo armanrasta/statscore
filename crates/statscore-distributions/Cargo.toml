@@ -15,6 +15,12 @@ rand_distr = { workspace = true }
 
 [dev-dependencies]
 approx = "0.5.1"
+criterion = { workspace = true }
+rand = { workspace = true }
+
+[[bench]]
+name = "distributions"
+harness = false
 
 [lints]
 workspace = true

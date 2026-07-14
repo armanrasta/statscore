@@ -62,6 +62,7 @@ approx = "0.6.0-rc2"
 pyo3 = { version = "0.28.3", features = ["extension-module"] }
 numpy = "0.28.0"
 serde = { version = "1.0.228", features = ["derive"] }
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [workspace.lints.rust]
 missing_docs = "warn"
