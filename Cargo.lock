@@ -1543,6 +1543,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "statscore-fuzzy"
+version = "0.1.0"
+dependencies = [
+ "statscore-common",
+]
+
+[[package]]
 name = "statscore-hypothesis"
 version = "0.1.0"
 
