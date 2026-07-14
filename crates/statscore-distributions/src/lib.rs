@@ -4,27 +4,43 @@
 //! implements [`ContinuousDistribution`] or [`DiscreteDistribution`] from
 //! [`statscore-common`].
 //!
-//! ## Planned modules
-//! - `continuous` — Normal, Student-t, χ², F, Beta, Gamma, Exponential, …
-//! - `discrete` — Binomial, Poisson, Negative binomial, Geometric, …
-//! - `multivariate` — Multivariate normal, Dirichlet, Wishart, Multivariate t
+//! ## Modules
+//! - [`continuous`] — Normal, Uniform, Exponential, Gamma, Beta, χ², Student-t, F
+//! - [`discrete`] — Binomial, Poisson, Geometric
 //!
 //! ## Dependencies
 //! - [`statscore-common`] — distribution traits
-//! - [`statscore-special`] — gamma, beta, erf, bessel
-//! - [`statscore-linalg`] — Cholesky for multivariate normal
-//! - [`statscore-probability`] — moment identities
+//! - [`statscore-special`] — gamma, beta, erf for CDFs/PPFs
+//! - [`rand`] / [`rand_distr`] — sampling
 //!
 //! ## Guide
 //!
-//! See the [crate guide](docs/README.md) for planned modules and status.
+//! See the [crate guide](docs/README.md) for API tables, parameterization,
+//! and accuracy notes.
 //!
-//! ## Status
-//! Scaffold crate — implementation pending (Phase 1 MVP).
+//! ## Example
+//! ```
+//! use statscore_common::ContinuousDistribution;
+//! use statscore_distributions::Normal;
+//!
+//! let n = Normal::standard();
+//! assert!((n.cdf(0.0) - 0.5).abs() < 1e-12);
+//! let q = n.ppf(0.975).unwrap();
+//! assert!((q - 1.959963984540054).abs() < 1e-10);
+//! ```
 //!
 //! [`ContinuousDistribution`]: statscore_common::ContinuousDistribution
 //! [`DiscreteDistribution`]: statscore_common::DiscreteDistribution
-//! [`statscore-common`]: https://docs.rs/statscore-common
 
 #![warn(missing_docs)]
 #![forbid(unsafe_code)]
+
+pub mod continuous;
+pub mod discrete;
+
+mod util;
+
+pub use continuous::{
+    Beta, ChiSquared, Exponential, FDistribution, Gamma, Normal, StudentT, Uniform,
+};
+pub use discrete::{Binomial, Geometric, Poisson};

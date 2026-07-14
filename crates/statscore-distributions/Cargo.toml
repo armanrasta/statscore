@@ -8,6 +8,13 @@ repository.workspace = true
 authors.workspace = true
 
 [dependencies]
+statscore-common = { workspace = true }
+statscore-special = { workspace = true }
+rand = { workspace = true }
+rand_distr = { workspace = true }
+
+[dev-dependencies]
+approx = "0.5.1"
 
 [lints]
 workspace = true

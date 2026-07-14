@@ -1,36 +1,65 @@
 # statscore-distributions
 
-Probability distributions: continuous, discrete, and multivariate. First user-facing crate.
-
-## Overview
-
-Every distribution implements `ContinuousDistribution` or `DiscreteDistribution` from `statscore-common`. Python bindings ship in the same milestone.
-
-## Planned modules
-
-### Continuous
-Normal, Student-t, χ², F, Beta, Gamma, Exponential, Uniform, Logistic, Weibull, Cauchy, Pareto, Gumbel, Laplace, Log-normal, Inverse-gamma, von Mises, Triangular
-
-### Discrete
-Binomial, Poisson, Negative binomial, Geometric, Hypergeometric, Multinomial, Discrete uniform
-
-### Multivariate
-Multivariate normal, Dirichlet, Wishart, Multivariate t
-
-## Per-distribution API
-
-Each distribution provides: `pdf`/`pmf`, `cdf`, `ppf`, `sample`, moments, stable `log_pdf`/`log_pmf`.
-
-## Dependencies
-
-- `statscore-common`, `statscore-special`, `statscore-linalg`, `statscore-probability`
-
-## Quality gates
-
-- CDF/PPF round-trip to 1e-10
-- Validated against SciPy/R
-- PyPI `0.1.0-alpha` with Python bindings
+Probability distributions implementing `ContinuousDistribution` / `DiscreteDistribution` from `statscore-common`.
 
 ## Status
 
-**Scaffold** (Phase 1 MVP).
+**Phase 1 MVP — in progress.** Core univariate distributions implemented; multivariate and remaining continuous/discrete families still planned.
+
+## Implemented
+
+### Continuous
+
+| Distribution | Type | Parameters | Notes |
+|--------------|------|------------|-------|
+| `Normal` | `Normal` | `loc`, `scale` | via erf / erf_inv |
+| `Uniform` | `Uniform` | `a`, `b` | continuous on `[a,b]` |
+| `Exponential` | `Exponential` | `rate` λ | mean = 1/λ |
+| `Gamma` | `Gamma` | `shape`, `scale` | SciPy/R scale param |
+| `Beta` | `Beta` | `alpha`, `beta` | on (0,1) |
+| `ChiSquared` | `ChiSquared` | `df` | = Gamma(df/2, 2) |
+| `StudentT` | `StudentT` | `df` | location 0, scale 1 |
+| `FDistribution` | `FDistribution` | `dfn`, `dfd` | Fisher–Snedecor F |
+
+### Discrete
+
+| Distribution | Type | Parameters | Support |
+|--------------|------|------------|---------|
+| `Binomial` | `Binomial` | `n`, `p` | `{0,…,n}` |
+| `Poisson` | `Poisson` | `lambda` | `{0,1,2,…}` |
+| `Geometric` | `Geometric` | `p` | failures before first success `{0,1,…}` |
+
+## API pattern
+
+```rust
+use statscore_common::ContinuousDistribution;
+use statscore_distributions::Normal;
+
+let n = Normal::new(0.0, 1.0).unwrap();
+let density = n.pdf(1.0);
+let prob = n.cdf(1.96);
+let quantile = n.ppf(0.975).unwrap();
+let samples = n.sample(&mut rand::rng(), 1000);
+```
+
+Same shape for discrete (`pmf` instead of `pdf`).
+
+## Dependencies
+
+- `statscore-common` — traits, `StatsError`
+- `statscore-special` — incomplete gamma/beta, erf
+- `rand` / `rand_distr` — sampling
+
+## Planned (not yet)
+
+Logistic, Weibull, Cauchy, Pareto, von Mises, Multinomial, NegativeBinomial, MultivariateNormal, Dirichlet, …
+
+## Python
+
+Bindings live in `statscore-python` (`statscore.distributions`). See that crate’s docs.
+
+## Testing
+
+```bash
+cargo test -p statscore-distributions
+```

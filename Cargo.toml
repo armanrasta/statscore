@@ -64,5 +64,6 @@ numpy = "0.28.0"
 serde = { version = "1.0.228", features = ["derive"] }
 
 [workspace.lints.rust]
-unsafe_code = "forbid"
 missing_docs = "warn"
+# Do not forbid unsafe at workspace level — `statscore-python` (PyO3) needs it.
+# Every other crate uses `#![forbid(unsafe_code)]` in its lib.rs.
