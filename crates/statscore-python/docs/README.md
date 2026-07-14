@@ -5,7 +5,9 @@ Depends on **NumPy** for array inputs/outputs (scalars still work as plain Pytho
 
 ## Status
 
-**Phase 0/1 scaffold — distributions exposed.** Importable package with continuous and discrete wrappers.
+**Phase 0/1 scaffold — distributions exposed.** Importable package with continuous and discrete wrappers (scalars + NumPy arrays).
+
+Performance vs SciPy/NumPy, absolute timings, and how to reproduce benches: **[performance.md](performance.md)**. Use a **release** build for any timing (`maturin develop --release`).
 
 ## Install (development)
 
@@ -13,7 +15,7 @@ Depends on **NumPy** for array inputs/outputs (scalars still work as plain Pytho
 cd crates/statscore-python
 python -m venv .venv && source .venv/bin/activate
 pip install maturin numpy
-maturin develop
+maturin develop --release   # required for real speed; debug is much slower
 ```
 
 ## Usage
@@ -75,3 +77,14 @@ Helpers: `standard_normal()`.
 ```bash
 python examples/demo_distributions.py
 ```
+
+## Benchmarks
+
+```bash
+pip install scipy   # only needed for vs-SciPy bench
+python benches/bench_statscore_numpy.py   # absolute (scalar + ndarray)
+python benches/bench_vs_scipy.py
+python benches/bench_vs_numpy.py
+```
+
+See [performance.md](performance.md) for recorded release numbers and interpretation.

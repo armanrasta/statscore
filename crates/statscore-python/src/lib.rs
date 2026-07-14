@@ -10,6 +10,7 @@
 //! ## Guide
 //!
 //! See the [crate guide](docs/README.md) for install and usage.
+//! See [performance.md](docs/performance.md) for release benchmarks vs SciPy/NumPy.
 //!
 //! ## Example
 //! ```ignore
