@@ -66,6 +66,9 @@ cargo run -p statscore-fuzzy --example fuzzy_basics
 **Phase 1 core — implemented.** Triangular/trapezoidal numbers, fuzzy logic,
 and basic fuzzy statistics with unit tests and doctests.
 
+Python: `from statscore.fuzzy import TriangularFuzzyNumber, …` via
+`statscore-python` (see that crate’s guide).
+
 ### Planned (future phases)
 
 - More membership functions (Gaussian, sigmoidal, singleton).

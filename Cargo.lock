@@ -1585,6 +1585,7 @@ dependencies = [
  "rand",
  "statscore-common",
  "statscore-distributions",
+ "statscore-fuzzy",
 ]
 
 [[package]]

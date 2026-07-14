@@ -5,7 +5,7 @@ Depends on **NumPy** for array inputs/outputs (scalars still work as plain Pytho
 
 ## Status
 
-**Phase 0/1 scaffold — distributions exposed.** Importable package with continuous and discrete wrappers (scalars + NumPy arrays).
+**Phase 0/1 scaffold — distributions + fuzzy exposed.** Importable package with continuous/discrete wrappers and fuzzy sets/logic/stats (scalars + NumPy where applicable).
 
 Performance vs SciPy/NumPy, absolute timings, and how to reproduce benches: **[performance.md](performance.md)**. Use a **release** build for any timing (`maturin develop --release`).
 
@@ -72,19 +72,43 @@ Discrete: `pmf`, `logpmf`, `cdf` — int or int/float array; `ppf` — float or 
 
 Helpers: `standard_normal()`.
 
+## Exposed types (`statscore.fuzzy`)
+
+| Symbol | Role |
+|--------|------|
+| `TriangularFuzzyNumber(a, m, b)` | Triangle with peak at `m` |
+| `TrapezoidalFuzzyNumber(a, m1, m2, b)` | Flat top `[m1, m2]` |
+| `fuzzy_and_min` / `fuzzy_and_product` / `fuzzy_and_lukasiewicz` | Fuzzy AND |
+| `fuzzy_or_max` / `fuzzy_or_sum` | Fuzzy OR |
+| `fuzzy_not` / `implication` | Complement / Mamdani |
+| `fuzzy_mean` / `fuzzy_variance` / `fuzzy_correlation` | Fuzzy statistics |
+
+Methods on fuzzy numbers: `membership` (float or ndarray), `core`, `support`, `alpha_cut`, `defuzzify_cog`, `defuzzify_mom`, `defuzzify_weighted`.
+
+```python
+from statscore.fuzzy import TriangularFuzzyNumber, fuzzy_mean
+
+warm = TriangularFuzzyNumber(18.0, 22.0, 26.0)
+print(warm.membership(20.0))           # 0.5
+print(warm.membership(np.linspace(18, 26, 5)))
+print(fuzzy_mean([warm, TriangularFuzzyNumber(20.0, 22.0, 24.0)]))
+```
+
 ## Demo
 
 ```bash
 python examples/demo_distributions.py
+python examples/demo_fuzzy.py
 ```
 
 ## Benchmarks
 
 ```bash
-pip install scipy   # only needed for vs-SciPy bench
+pip install scipy scikit-fuzzy
 python benches/bench_statscore_numpy.py   # absolute (scalar + ndarray)
 python benches/bench_vs_scipy.py
 python benches/bench_vs_numpy.py
+python benches/bench_vs_skfuzzy.py        # fuzzy vs scikit-fuzzy
 ```
 
 See [performance.md](performance.md) for recorded release numbers and interpretation.

@@ -6,6 +6,7 @@
 //!
 //! ## Modules
 //! - [`distributions`] — Normal, Gamma, Binomial, …
+//! - [`fuzzy`] — triangular/trapezoidal numbers, fuzzy logic, fuzzy stats
 //!
 //! ## Guide
 //!
@@ -15,11 +16,14 @@
 //! ## Example
 //! ```ignore
 //! import numpy as np
-//! import statscore
 //! from statscore.distributions import Normal
+//! from statscore.fuzzy import TriangularFuzzyNumber
+//!
 //! dist = Normal(0.0, 1.0)
-//! print(dist.cdf(1.96))              # float → float
-//! print(dist.pdf(np.linspace(-1, 1, 5)))  # ndarray → ndarray
+//! print(dist.cdf(1.96))
+//!
+//! warm = TriangularFuzzyNumber(18.0, 22.0, 26.0)
+//! print(warm.membership(np.linspace(18, 26, 5)))
 //! ```
 
 #![warn(missing_docs)]
@@ -28,6 +32,7 @@
 mod convert;
 mod distributions;
 mod error;
+mod fuzzy;
 
 use pyo3::prelude::*;
 
@@ -39,13 +44,18 @@ fn statscore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     let dist = PyModule::new(m.py(), "distributions")?;
     distributions::register(&dist)?;
     m.add_submodule(&dist)?;
-
-    // Allow `from statscore.distributions import Normal` after package install
-    // by also registering under sys.modules when used as a flat extension.
     m.py()
         .import("sys")?
         .getattr("modules")?
         .set_item("statscore.distributions", &dist)?;
+
+    let fuzzy_mod = PyModule::new(m.py(), "fuzzy")?;
+    fuzzy::register(&fuzzy_mod)?;
+    m.add_submodule(&fuzzy_mod)?;
+    m.py()
+        .import("sys")?
+        .getattr("modules")?
+        .set_item("statscore.fuzzy", &fuzzy_mod)?;
 
     Ok(())
 }

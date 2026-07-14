@@ -137,14 +137,71 @@ NumPy column = vectorized formulas (`exp`, A&S `erf`) or `numpy.random.Generator
 4. **Debug builds are not comparable** to SciPy/NumPy (those ship optimized C/Fortran).
 5. **No custom ndarray library** — keep NumPy as the buffer format; optimize Rust kernels if something falls behind.
 
+## Fuzzy vs scikit-fuzzy (`statscore.fuzzy`)
+
+Competitor: [scikit-fuzzy](https://github.com/scikit-fuzzy/scikit-fuzzy) (`skfuzzy`), the main Python fuzzy toolkit.
+Reproduce:
+
+```bash
+pip install scikit-fuzzy
+maturin develop --release
+python benches/bench_vs_skfuzzy.py
+```
+
+Accuracy: `max |trimf − membership| = 0` on a 10k grid; CoG Δ vs discrete centroid ≈ `1.5e-8`.
+
+### Membership & defuzzify (release)
+
+| Op | statscore | skfuzzy | Speedup |
+|----|-----------|---------|---------|
+| `Tri.membership(2.5)` | 152 ns | 12 µs | **81×** |
+| `Trap.membership(2.0)` | 123 ns | 27 µs | **223×** |
+| `defuzzify_cog` (closed form vs discrete centroid @2k) | 95 ns | 1.45 ms | **~15 000×** |
+| `defuzzify_mom` | 86 ns | 5.0 µs | **58×** |
+| `Tri.membership ×1k` | 1.7 µs | 14 µs | **8.6×** |
+| `Tri.membership ×10k` | 11 µs | 41 µs | **3.7×** |
+| `Tri.membership ×100k` | 105 µs | 600 µs | **5.7×** |
+| `Trap.membership ×100k` | 109 µs | 473 µs | **4.3×** |
+
+Closed-form CoG is expected to crush discrete centroid — that is an algorithmic win, not just FFI.
+
+### Fuzzy logic scalars
+
+| Op | statscore | skfuzzy (len-1 arrays) | Speedup |
+|----|-----------|------------------------|---------|
+| `fuzzy_and_min` | 113 ns | 1.2 µs | **11×** |
+| `fuzzy_or_max` | 89 ns | 1.2 µs | **13×** |
+| `fuzzy_not` | 95 ns | 565 ns | **6×** |
+
+### Fuzzy statistics
+
+skfuzzy has **no** `fuzzy_mean` / `fuzzy_variance` / `fuzzy_correlation`. Competitor column is NumPy on centroids (where that matches our defuzzified variance/correlation):
+
+| Op | statscore | NumPy-on-CoG | Speedup |
+|----|-----------|--------------|---------|
+| `fuzzy_mean(n=1000)` | 16 µs | 2 µs | 0.13× (we keep full vertices) |
+| `fuzzy_variance(n=1000)` | 16 µs | 6 µs | 0.38× |
+| `fuzzy_correlation(n=200)` | 6.7 µs | 22 µs | **3.2×** |
+
+Mean is slower than “mean of floats” because we return a **triangular** (vertex-wise) mean, not a scalar — by design.
+
+### Fuzzy takeaways
+
+1. Membership evaluation: several× faster than skfuzzy on large grids; tens–hundreds× on scalars.
+2. Defuzzify CoG: closed form vs sampled centroid — orders of magnitude faster, same answer to ~1e-8.
+3. Logic scalars: clear win vs skfuzzy’s universe+MF API.
+4. Stats: unique API vs skfuzzy; variance/correlation competitive with NumPy CoG pipelines.
+
 ## What is still unfinished
 
 - Full SciPy distribution catalog (more continuous/discrete/multivariate).
 - Dedicated SIMD / out-of-place write-into-existing-buffer APIs (optional; not required for current parity).
 - Automated CI that runs release Python benches and fails on large regressions.
 - Publish release notes with these tables when cutting the first PyPI version.
+- More fuzzy MFs (Gaussian, sigmoid) and FIS comparison benches vs skfuzzy control system examples.
 
 ## Related docs
 
 - [Python crate guide](README.md) — install, API table, scalar vs array usage  
 - [`statscore-distributions` guide](../../statscore-distributions/docs/README.md) — Rust core  
+- [`statscore-fuzzy` guide](../../statscore-fuzzy/docs/README.md) — fuzzy Rust core  
