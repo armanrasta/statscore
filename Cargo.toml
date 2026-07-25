@@ -31,24 +31,24 @@ repository = "https://github.com/armanrasta/statscore"
 authors = ["Arman Rostami <armanrostami1382@gmail.com>"]
 
 [workspace.dependencies]
-statscore-common        = { path = "crates/statscore-common" }
-statscore-special       = { path = "crates/statscore-special" }
-statscore-linalg        = { path = "crates/statscore-linalg" }
-statscore-probability   = { path = "crates/statscore-probability" }
-statscore-distributions = { path = "crates/statscore-distributions" }
-statscore-fuzzy         = { path = "crates/statscore-fuzzy" }
-statscore-descriptive   = { path = "crates/statscore-descriptive" }
-statscore-hypothesis    = { path = "crates/statscore-hypothesis" }
-statscore-regression    = { path = "crates/statscore-regression" }
-statscore-multivariate  = { path = "crates/statscore-multivariate" }
-statscore-timeseries    = { path = "crates/statscore-timeseries" }
-statscore-bayesian      = { path = "crates/statscore-bayesian" }
-statscore-simulation    = { path = "crates/statscore-simulation" }
-statscore-survival      = { path = "crates/statscore-survival" }
-statscore-categorical   = { path = "crates/statscore-categorical" }
-statscore-quality       = { path = "crates/statscore-quality" }
-statscore-information   = { path = "crates/statscore-information" }
-statscore-compute       = { path = "crates/statscore-compute" }
+statscore-common        = { path = "crates/statscore-common", version = "0.1.0" }
+statscore-special       = { path = "crates/statscore-special", version = "0.1.0" }
+statscore-linalg        = { path = "crates/statscore-linalg", version = "0.1.0" }
+statscore-probability   = { path = "crates/statscore-probability", version = "0.1.0" }
+statscore-distributions = { path = "crates/statscore-distributions", version = "0.1.0" }
+statscore-fuzzy         = { path = "crates/statscore-fuzzy", version = "0.1.0" }
+statscore-descriptive   = { path = "crates/statscore-descriptive", version = "0.1.0" }
+statscore-hypothesis    = { path = "crates/statscore-hypothesis", version = "0.1.0" }
+statscore-regression    = { path = "crates/statscore-regression", version = "0.1.0" }
+statscore-multivariate  = { path = "crates/statscore-multivariate", version = "0.1.0" }
+statscore-timeseries    = { path = "crates/statscore-timeseries", version = "0.1.0" }
+statscore-bayesian      = { path = "crates/statscore-bayesian", version = "0.1.0" }
+statscore-simulation    = { path = "crates/statscore-simulation", version = "0.1.0" }
+statscore-survival      = { path = "crates/statscore-survival", version = "0.1.0" }
+statscore-categorical   = { path = "crates/statscore-categorical", version = "0.1.0" }
+statscore-quality       = { path = "crates/statscore-quality", version = "0.1.0" }
+statscore-information   = { path = "crates/statscore-information", version = "0.1.0" }
+statscore-compute       = { path = "crates/statscore-compute", version = "0.1.0" }
 
 ndarray = "0.17.2"
 ndarray-linalg = "0.18.1"

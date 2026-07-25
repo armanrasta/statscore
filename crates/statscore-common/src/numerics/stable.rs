@@ -105,7 +105,7 @@ pub fn log1mexp(x: f64) -> f64 {
     if x > -std::f64::consts::LN_2 {
         (-x.exp_m1()).ln()
     } else {
-        (-x).exp().ln_1p()
+        (-x.exp()).ln_1p()
     }
 }
 
