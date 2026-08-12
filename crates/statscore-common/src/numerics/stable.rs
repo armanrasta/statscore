@@ -270,11 +270,7 @@ mod tests {
     #[test]
     fn log_logistic_consistency() {
         for x in [-5.0, -1.0, 0.0, 1.0, 5.0] {
-            assert_relative_eq!(
-                log_logistic(x),
-                logistic(x).ln(),
-                epsilon = 1e-12
-            );
+            assert_relative_eq!(log_logistic(x), logistic(x).ln(), epsilon = 1e-12);
         }
     }
 }

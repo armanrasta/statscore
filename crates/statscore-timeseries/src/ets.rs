@@ -54,9 +54,8 @@ impl EtsFit {
             EtsModel::Ann | EtsModel::Mnn => fit_ses(x, 0.3, model),
             EtsModel::Aan => fit_holt(x, 0.3, 0.1),
             EtsModel::Aaa => {
-                let p = period.ok_or_else(|| {
-                    StatsError::domain("ETS AAA requires a seasonal period")
-                })?;
+                let p = period
+                    .ok_or_else(|| StatsError::domain("ETS AAA requires a seasonal period"))?;
                 fit_holt_winters_additive(x, p, 0.3, 0.1, 0.1)
             }
         }

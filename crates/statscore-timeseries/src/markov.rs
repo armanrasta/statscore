@@ -156,7 +156,7 @@ impl MarkovChain {
 mod tests {
     use super::*;
     use approx::assert_relative_eq;
-    use rand::{rng, RngExt};
+    use rand::{RngExt, rng};
 
     #[test]
     fn markov_two_state() {

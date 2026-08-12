@@ -72,13 +72,7 @@ impl SeasonalNaiveModel {
         require_series(x, period, "seasonal_naive")?;
         let season = x[x.len() - period..].to_vec();
         let fitted: Vec<f64> = (0..x.len())
-            .map(|t| {
-                if t < period {
-                    x[t]
-                } else {
-                    x[t - period]
-                }
-            })
+            .map(|t| if t < period { x[t] } else { x[t - period] })
             .collect();
         let residuals: Vec<f64> = x.iter().zip(&fitted).map(|(y, f)| y - f).collect();
         Ok(Self {
@@ -93,9 +87,7 @@ impl SeasonalNaiveModel {
 impl Forecaster for SeasonalNaiveModel {
     fn forecast(&self, h: usize) -> Result<Forecast> {
         require_horizon(h)?;
-        let point: Vec<f64> = (0..h)
-            .map(|i| self.season[i % self.period])
-            .collect();
+        let point: Vec<f64> = (0..h).map(|i| self.season[i % self.period]).collect();
         Ok(Forecast::with_fit(
             point,
             self.fitted.clone(),
@@ -131,9 +123,7 @@ impl DriftModel {
         require_series(x, 2, "drift")?;
         let n = x.len();
         let slope = (x[n - 1] - x[0]) / (n as f64 - 1.0);
-        let fitted: Vec<f64> = (0..n)
-            .map(|t| x[0] + slope * t as f64)
-            .collect();
+        let fitted: Vec<f64> = (0..n).map(|t| x[0] + slope * t as f64).collect();
         let residuals: Vec<f64> = x.iter().zip(&fitted).map(|(y, f)| y - f).collect();
         Ok(Self {
             last: x[n - 1],
@@ -147,9 +137,7 @@ impl DriftModel {
 impl Forecaster for DriftModel {
     fn forecast(&self, h: usize) -> Result<Forecast> {
         require_horizon(h)?;
-        let point: Vec<f64> = (1..=h)
-            .map(|i| self.last + self.slope * i as f64)
-            .collect();
+        let point: Vec<f64> = (1..=h).map(|i| self.last + self.slope * i as f64).collect();
         Ok(Forecast::with_fit(
             point,
             self.fitted.clone(),

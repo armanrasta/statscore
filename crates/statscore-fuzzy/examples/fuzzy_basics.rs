@@ -29,7 +29,10 @@ fn main() -> Result<()> {
     println!("\n== Fuzzy logic ==");
     let (a, b) = (0.7, 0.4);
     println!("  AND(min)        = {:.2}", FuzzyLogic::fuzzy_and_min(a, b));
-    println!("  AND(product)    = {:.2}", FuzzyLogic::fuzzy_and_product(a, b));
+    println!(
+        "  AND(product)    = {:.2}",
+        FuzzyLogic::fuzzy_and_product(a, b)
+    );
     println!("  OR(max)         = {:.2}", FuzzyLogic::fuzzy_or_max(a, b));
     println!("  OR(sum)         = {:.2}", FuzzyLogic::fuzzy_or_sum(a, b));
     println!("  NOT(0.7)        = {:.2}", FuzzyLogic::fuzzy_not(a));

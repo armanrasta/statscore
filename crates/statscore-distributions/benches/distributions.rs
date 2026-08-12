@@ -34,18 +34,10 @@ fn bench_batch_eval(c: &mut Criterion) {
     group.throughput(Throughput::Elements(xs.len() as u64));
 
     group.bench_function("pdf_10k", |b| {
-        b.iter(|| {
-            xs.iter()
-                .map(|&x| n.pdf(black_box(x)))
-                .collect::<Vec<_>>()
-        })
+        b.iter(|| xs.iter().map(|&x| n.pdf(black_box(x))).collect::<Vec<_>>())
     });
     group.bench_function("cdf_10k", |b| {
-        b.iter(|| {
-            xs.iter()
-                .map(|&x| n.cdf(black_box(x)))
-                .collect::<Vec<_>>()
-        })
+        b.iter(|| xs.iter().map(|&x| n.cdf(black_box(x))).collect::<Vec<_>>())
     });
     group.finish();
 }
@@ -69,7 +61,9 @@ fn bench_others(c: &mut Criterion) {
     group.bench_function("beta/cdf", |b| b.iter(|| beta.cdf(black_box(0.3))));
     group.bench_function("beta/ppf", |b| b.iter(|| beta.ppf(black_box(0.5)).unwrap()));
     group.bench_function("chi2/cdf", |b| b.iter(|| chi2.cdf(black_box(5.0))));
-    group.bench_function("chi2/ppf", |b| b.iter(|| chi2.ppf(black_box(0.95)).unwrap()));
+    group.bench_function("chi2/ppf", |b| {
+        b.iter(|| chi2.ppf(black_box(0.95)).unwrap())
+    });
     group.bench_function("student_t/cdf", |b| b.iter(|| t.cdf(black_box(1.5))));
     group.bench_function("student_t/ppf", |b| {
         b.iter(|| t.ppf(black_box(0.95)).unwrap())

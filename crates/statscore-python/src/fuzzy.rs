@@ -4,15 +4,19 @@ use pyo3::prelude::*;
 use pyo3::types::PyTuple;
 use statscore_fuzzy::{
     FuzzyLogic as RustLogic, FuzzyNumber, FuzzySet, TrapezoidalFuzzyNumber as RustTrap,
-    TriangularFuzzyNumber as RustTri, fuzzy_correlation as rust_corr,
-    fuzzy_mean as rust_mean, fuzzy_variance as rust_var,
+    TriangularFuzzyNumber as RustTri, fuzzy_correlation as rust_corr, fuzzy_mean as rust_mean,
+    fuzzy_variance as rust_var,
 };
 
 use crate::convert::map_f64;
 use crate::error::stats_to_py;
 
 /// Triangular fuzzy number with vertices `a < m < b` and peak `μ(m) = 1`.
-#[pyclass(module = "statscore.fuzzy", skip_from_py_object, name = "TriangularFuzzyNumber")]
+#[pyclass(
+    module = "statscore.fuzzy",
+    skip_from_py_object,
+    name = "TriangularFuzzyNumber"
+)]
 #[derive(Clone)]
 pub struct TriangularFuzzyNumber {
     inner: RustTri,
@@ -94,7 +98,11 @@ impl TriangularFuzzyNumber {
 }
 
 /// Trapezoidal fuzzy number with vertices `a < m1 ≤ m2 < b`.
-#[pyclass(module = "statscore.fuzzy", skip_from_py_object, name = "TrapezoidalFuzzyNumber")]
+#[pyclass(
+    module = "statscore.fuzzy",
+    skip_from_py_object,
+    name = "TrapezoidalFuzzyNumber"
+)]
 #[derive(Clone)]
 pub struct TrapezoidalFuzzyNumber {
     inner: RustTrap,

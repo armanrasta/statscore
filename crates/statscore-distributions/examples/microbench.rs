@@ -97,12 +97,22 @@ fn main() {
     let ns = time_ns(2_000, || {
         let _: Vec<_> = xs.iter().map(|&x| n.pdf(black_box(x))).collect();
     });
-    println!("{:<28} {:>10.1}  ({:.1} ns/elem)", "Normal.pdf×10k", ns, ns / 10_000.0);
+    println!(
+        "{:<28} {:>10.1}  ({:.1} ns/elem)",
+        "Normal.pdf×10k",
+        ns,
+        ns / 10_000.0
+    );
 
     let ns = time_ns(2_000, || {
         let _: Vec<_> = xs.iter().map(|&x| n.cdf(black_box(x))).collect();
     });
-    println!("{:<28} {:>10.1}  ({:.1} ns/elem)", "Normal.cdf×10k", ns, ns / 10_000.0);
+    println!(
+        "{:<28} {:>10.1}  ({:.1} ns/elem)",
+        "Normal.cdf×10k",
+        ns,
+        ns / 10_000.0
+    );
 
     let ns = time_ns(200, || {
         black_box(n.sample(&mut rng(), black_box(100_000)));

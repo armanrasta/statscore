@@ -28,10 +28,7 @@ pub enum StatsError {
 
     /// An iterative algorithm failed to converge within the allowed iterations.
     #[error("Convergence failed after {iterations} iterations: {message}")]
-    Convergence {
-        iterations: usize,
-        message: String,
-    },
+    Convergence { iterations: usize, message: String },
 
     /// A matrix is numerically singular (cannot be inverted).
     #[error("Singular matrix: {0}")]
@@ -43,24 +40,15 @@ pub enum StatsError {
 
     /// Arithmetic overflow during computation.
     #[error("Arithmetic overflow in {context}: {message}")]
-    Overflow {
-        context: String,
-        message: String,
-    },
+    Overflow { context: String, message: String },
 
     /// Arithmetic underflow during computation.
     #[error("Arithmetic underflow in {context}: {message}")]
-    Underflow {
-        context: String,
-        message: String,
-    },
+    Underflow { context: String, message: String },
 
     /// Not enough data points to perform the computation.
     #[error("Insufficient data: need at least {required}, got {got}")]
-    InsufficientData {
-        required: usize,
-        got: usize,
-    },
+    InsufficientData { required: usize, got: usize },
 
     /// A numeric value is outside its allowed range.
     ///
@@ -79,10 +67,7 @@ pub enum StatsError {
 
     /// A numerical computation produced NaN or infinity unexpectedly.
     #[error("Numerical error in {context}: {message}")]
-    Numerical {
-        context: String,
-        message: String,
-    },
+    Numerical { context: String, message: String },
 
     /// Feature or algorithm is not yet implemented.
     #[error("Not implemented: {0}")]
@@ -132,12 +117,7 @@ impl StatsError {
     }
 
     /// Create a [`StatsError::OutOfBounds`] error.
-    pub fn out_of_bounds(
-        param: impl Into<String>,
-        lo: f64,
-        hi: f64,
-        actual: f64,
-    ) -> Self {
+    pub fn out_of_bounds(param: impl Into<String>, lo: f64, hi: f64, actual: f64) -> Self {
         Self::OutOfBounds {
             param: param.into(),
             lo,
@@ -232,12 +212,7 @@ pub fn require_finite(slice: &[f64], ctx: &str) -> Result<()> {
 ///
 /// # Errors
 /// Returns [`StatsError::OutOfBounds`] if `value < lo || value > hi`.
-pub fn require_in_range(
-    value: f64,
-    lo: f64,
-    hi: f64,
-    param: &str,
-) -> Result<()> {
+pub fn require_in_range(value: f64, lo: f64, hi: f64, param: &str) -> Result<()> {
     if value < lo || value > hi {
         return Err(StatsError::out_of_bounds(param, lo, hi, value));
     }
@@ -284,7 +259,10 @@ mod tests {
         let err = require_min_len(&[1.0], 2).unwrap_err();
         assert!(matches!(
             err,
-            StatsError::InsufficientData { required: 2, got: 1 }
+            StatsError::InsufficientData {
+                required: 2,
+                got: 1
+            }
         ));
     }
 

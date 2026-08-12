@@ -11,7 +11,7 @@ use statscore_timeseries::baselines::{
     drift as rust_drift, naive as rust_naive, seasonal_naive as rust_seasonal_naive,
 };
 use statscore_timeseries::decomposition::{
-    classical_decompose as rust_decompose, DecomposeModel as RustDecompose,
+    DecomposeModel as RustDecompose, classical_decompose as rust_decompose,
 };
 use statscore_timeseries::ets::{EtsFit as RustEts, EtsModel as RustEtsModel};
 use statscore_timeseries::forecast::{Forecast as RustForecast, Forecaster};
@@ -20,7 +20,7 @@ use statscore_timeseries::prophet::{
     ProphetStyleModel as RustProphet, ProphetStyleSpec as RustProphetSpec,
 };
 use statscore_timeseries::stationarity::{
-    adf_test as rust_adf, kpss_test as rust_kpss, KpssKind as RustKpssKind,
+    KpssKind as RustKpssKind, adf_test as rust_adf, kpss_test as rust_kpss,
 };
 
 use crate::convert::vec_f64_to_numpy;
@@ -85,17 +85,15 @@ fn parse_kpss_kind(name: &str) -> PyResult<RustKpssKind> {
     match name.to_ascii_lowercase().as_str() {
         "level" => Ok(RustKpssKind::Level),
         "trend" => Ok(RustKpssKind::Trend),
-        _ => Err(PyValueError::new_err("kpss kind must be 'level' or 'trend'")),
+        _ => Err(PyValueError::new_err(
+            "kpss kind must be 'level' or 'trend'",
+        )),
     }
 }
 
 /// Naive (last-value) forecast.
 #[pyfunction]
-fn naive<'py>(
-    py: Python<'py>,
-    x: &Bound<'py, PyAny>,
-    h: usize,
-) -> PyResult<Bound<'py, PyDict>> {
+fn naive<'py>(py: Python<'py>, x: &Bound<'py, PyAny>, h: usize) -> PyResult<Bound<'py, PyDict>> {
     let x = extract_f64_1d(py, x)?;
     let f = rust_naive(&x, h).map_err(stats_to_py)?;
     forecast_to_dict(py, f)
@@ -116,11 +114,7 @@ fn seasonal_naive<'py>(
 
 /// Drift (linear extrapolate from first to last) forecast.
 #[pyfunction]
-fn drift<'py>(
-    py: Python<'py>,
-    x: &Bound<'py, PyAny>,
-    h: usize,
-) -> PyResult<Bound<'py, PyDict>> {
+fn drift<'py>(py: Python<'py>, x: &Bound<'py, PyAny>, h: usize) -> PyResult<Bound<'py, PyDict>> {
     let x = extract_f64_1d(py, x)?;
     let f = rust_drift(&x, h).map_err(stats_to_py)?;
     forecast_to_dict(py, f)
@@ -188,7 +182,11 @@ impl EtsFit {
 }
 
 /// Fitted ARIMA(p, d, q) model.
-#[pyclass(module = "statscore.timeseries", skip_from_py_object, name = "ArimaModel")]
+#[pyclass(
+    module = "statscore.timeseries",
+    skip_from_py_object,
+    name = "ArimaModel"
+)]
 pub struct ArimaModel {
     inner: RustArima,
 }
@@ -269,7 +267,11 @@ impl ArimaModel {
 }
 
 /// Prophet-style additive OLS model (not Facebook/Stan Prophet).
-#[pyclass(module = "statscore.timeseries", skip_from_py_object, name = "ProphetStyleModel")]
+#[pyclass(
+    module = "statscore.timeseries",
+    skip_from_py_object,
+    name = "ProphetStyleModel"
+)]
 pub struct ProphetStyleModel {
     inner: RustProphet,
 }
@@ -316,7 +318,11 @@ impl ProphetStyleModel {
 }
 
 /// Discrete-time Markov chain from a state sequence.
-#[pyclass(module = "statscore.timeseries", skip_from_py_object, name = "MarkovChain")]
+#[pyclass(
+    module = "statscore.timeseries",
+    skip_from_py_object,
+    name = "MarkovChain"
+)]
 pub struct MarkovChain {
     inner: RustMarkov,
 }

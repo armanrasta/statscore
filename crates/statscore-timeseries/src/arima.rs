@@ -62,11 +62,7 @@ impl ArimaModel {
         // demean for AR estimation
         let zc: Vec<f64> = z.iter().map(|v| v - intercept).collect();
 
-        let ar = if p == 0 {
-            vec![]
-        } else {
-            yule_walker(&zc, p)?
-        };
+        let ar = if p == 0 { vec![] } else { yule_walker(&zc, p)? };
 
         // AR residuals
         let mut ar_resid = vec![0.0; n];
@@ -123,19 +119,11 @@ impl ArimaModel {
         // map fitted differenced back to levels approximately for d=0; for d>0
         // report NA-style by using undiff of predicted z
         let (fitted, residuals) = if d == 0 {
-            let fitted: Vec<f64> = z
-                .iter()
-                .zip(&residuals_z)
-                .map(|(zi, e)| zi - e)
-                .collect();
+            let fitted: Vec<f64> = z.iter().zip(&residuals_z).map(|(zi, e)| zi - e).collect();
             let residuals: Vec<f64> = x.iter().zip(&fitted).map(|(y, f)| y - f).collect();
             (fitted, residuals)
         } else if d == 1 {
-            let pred_z: Vec<f64> = z
-                .iter()
-                .zip(&residuals_z)
-                .map(|(zi, e)| zi - e)
-                .collect();
+            let pred_z: Vec<f64> = z.iter().zip(&residuals_z).map(|(zi, e)| zi - e).collect();
             let fitted = undiff(x[0], &pred_z);
             let residuals: Vec<f64> = x.iter().zip(&fitted).map(|(y, f)| y - f).collect();
             (fitted, residuals)
@@ -220,8 +208,7 @@ impl Forecaster for ArimaModel {
             0 => z_fc,
             1 => {
                 let mut lvl = *self.levels.last().unwrap_or(&0.0);
-                z_fc
-                    .iter()
+                z_fc.iter()
                     .map(|dz| {
                         lvl += dz;
                         lvl

@@ -15,8 +15,8 @@
 //! For large samples the allocation is unavoidable anyway.
 //! The Python layer maps this directly to a NumPy array.
 
-use rand::Rng;
 use crate::error::Result;
+use rand::Rng;
 
 // ── Continuous distributions ──────────────────────────────────────────────────
 
@@ -65,11 +65,7 @@ pub trait ContinuousDistribution {
     /// Override this in implementations where a direct formula is more stable.
     fn log_pdf(&self, x: f64) -> f64 {
         let p = self.pdf(x);
-        if p > 0.0 {
-            p.ln()
-        } else {
-            f64::NEG_INFINITY
-        }
+        if p > 0.0 { p.ln() } else { f64::NEG_INFINITY }
     }
 
     /// Survival function: P(X > x) = 1 − CDF(x).
@@ -205,22 +201,34 @@ pub trait DiscreteDistribution {
     }
 
     /// Expected value. Returns `f64::NAN` if undefined.
-    fn mean(&self) -> f64 { f64::NAN }
+    fn mean(&self) -> f64 {
+        f64::NAN
+    }
 
     /// Variance. Returns `f64::NAN` if undefined.
-    fn variance(&self) -> f64 { f64::NAN }
+    fn variance(&self) -> f64 {
+        f64::NAN
+    }
 
     /// Standard deviation. Returns `f64::NAN` if undefined.
-    fn std_dev(&self) -> f64 { self.variance().sqrt() }
+    fn std_dev(&self) -> f64 {
+        self.variance().sqrt()
+    }
 
     /// Skewness. Returns `f64::NAN` if undefined.
-    fn skewness(&self) -> f64 { f64::NAN }
+    fn skewness(&self) -> f64 {
+        f64::NAN
+    }
 
     /// Excess kurtosis. Returns `f64::NAN` if undefined.
-    fn kurtosis(&self) -> f64 { f64::NAN }
+    fn kurtosis(&self) -> f64 {
+        f64::NAN
+    }
 
     /// Entropy in nats. Returns `f64::NAN` if not implemented.
-    fn entropy(&self) -> f64 { f64::NAN }
+    fn entropy(&self) -> f64 {
+        f64::NAN
+    }
 }
 
 // ── Fitting traits ────────────────────────────────────────────────────────────
@@ -272,11 +280,7 @@ pub trait MultivariateContinuousDistribution {
     /// Draw `n` samples, returning an n × d matrix (row-major).
     ///
     /// Each row is one observation.
-    fn sample<R: Rng + ?Sized>(
-        &self,
-        rng: &mut R,
-        n: usize,
-    ) -> Result<crate::types::Matrix>;
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R, n: usize) -> Result<crate::types::Matrix>;
 
     /// Mean vector μ ∈ ℝ^d.
     fn mean_vector(&self) -> crate::types::Vector;

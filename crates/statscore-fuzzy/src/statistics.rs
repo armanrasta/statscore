@@ -67,10 +67,7 @@ pub fn fuzzy_variance(values: &[TriangularFuzzyNumber]) -> Result<f64> {
 /// # Errors
 /// - [`StatsError::DimensionMismatch`] if the datasets differ in length.
 /// - [`StatsError::InsufficientData`] if fewer than two pairs are supplied.
-pub fn fuzzy_correlation(
-    x: &[TriangularFuzzyNumber],
-    y: &[TriangularFuzzyNumber],
-) -> Result<f64> {
+pub fn fuzzy_correlation(x: &[TriangularFuzzyNumber], y: &[TriangularFuzzyNumber]) -> Result<f64> {
     if x.len() != y.len() {
         return Err(StatsError::dim_mismatch(format!(
             "fuzzy_correlation: datasets differ in length ({} vs {})",

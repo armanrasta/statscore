@@ -9,11 +9,7 @@ use statscore_common::Result as StatsResult;
 
 /// Apply `f: f64 → f64` to a Python float **or** a 1-D NumPy `float64` array
 /// (or any sequence convertible to one).
-pub fn map_f64<'py, F>(
-    py: Python<'py>,
-    x: &Bound<'py, PyAny>,
-    f: F,
-) -> PyResult<Bound<'py, PyAny>>
+pub fn map_f64<'py, F>(py: Python<'py>, x: &Bound<'py, PyAny>, f: F) -> PyResult<Bound<'py, PyAny>>
 where
     F: Fn(f64) -> f64,
 {
@@ -93,10 +89,7 @@ where
     // Accept float arrays that are whole numbers (SciPy often passes int via float).
     if let Ok(arr) = k.extract::<PyReadonlyArray1<'_, f64>>() {
         let slice = arr.as_slice()?;
-        let out: Vec<f64> = slice
-            .iter()
-            .map(|&x| f(x as i64))
-            .collect();
+        let out: Vec<f64> = slice.iter().map(|&x| f(x as i64)).collect();
         return Ok(PyArray1::from_vec(py, out).into_any());
     }
 
