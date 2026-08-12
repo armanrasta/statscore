@@ -1615,6 +1615,12 @@ version = "0.1.0"
 [[package]]
 name = "statscore-timeseries"
 version = "0.1.0"
+dependencies = [
+ "approx",
+ "rand",
+ "statscore-common",
+ "statscore-linalg",
+]
 
 [[package]]
 name = "syn"
