@@ -7,6 +7,7 @@
 //! ## Modules
 //! - [`distributions`] — Normal, Gamma, Binomial, …
 //! - [`fuzzy`] — triangular/trapezoidal numbers, fuzzy logic, fuzzy stats
+//! - [`timeseries`] — baselines, ETS, ARIMA, Prophet-style, Markov, ADF/KPSS
 //!
 //! ## Guide
 //!
@@ -18,12 +19,16 @@
 //! import numpy as np
 //! from statscore.distributions import Normal
 //! from statscore.fuzzy import TriangularFuzzyNumber
+//! from statscore.timeseries import drift, EtsFit
 //!
 //! dist = Normal(0.0, 1.0)
 //! print(dist.cdf(1.96))
 //!
 //! warm = TriangularFuzzyNumber(18.0, 22.0, 26.0)
 //! print(warm.membership(np.linspace(18, 26, 5)))
+//!
+//! x = np.arange(40.0)
+//! print(drift(x, 5)["point"])
 //! ```
 
 #![warn(missing_docs)]
@@ -33,6 +38,7 @@ mod convert;
 mod distributions;
 mod error;
 mod fuzzy;
+mod timeseries;
 
 use pyo3::prelude::*;
 
@@ -56,6 +62,14 @@ fn statscore(m: &Bound<'_, PyModule>) -> PyResult<()> {
         .import("sys")?
         .getattr("modules")?
         .set_item("statscore.fuzzy", &fuzzy_mod)?;
+
+    let ts = PyModule::new(m.py(), "timeseries")?;
+    timeseries::register(&ts)?;
+    m.add_submodule(&ts)?;
+    m.py()
+        .import("sys")?
+        .getattr("modules")?
+        .set_item("statscore.timeseries", &ts)?;
 
     Ok(())
 }

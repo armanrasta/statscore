@@ -5,7 +5,7 @@ Depends on **NumPy** for array inputs/outputs (scalars still work as plain Pytho
 
 ## Status
 
-**Phase 0/1 scaffold — distributions + fuzzy exposed.** Importable package with continuous/discrete wrappers and fuzzy sets/logic/stats (scalars + NumPy where applicable).
+**Phase 0/1/2 scaffold — distributions + fuzzy + timeseries exposed.** Importable package with continuous/discrete wrappers, fuzzy sets/logic/stats, and forecasting/diagnostics (scalars + NumPy where applicable).
 
 Performance vs SciPy/NumPy, absolute timings, and how to reproduce benches: **[performance.md](performance.md)**. Use a **release** build for any timing (`maturin develop --release`).
 
@@ -94,21 +94,47 @@ print(warm.membership(np.linspace(18, 26, 5)))
 print(fuzzy_mean([warm, TriangularFuzzyNumber(20.0, 22.0, 24.0)]))
 ```
 
+## Exposed API (`statscore.timeseries`)
+
+Forecasts return a dict with NumPy `point` (and optional `fitted` / `residuals`).
+
+| Symbol | Role |
+|--------|------|
+| `naive` / `seasonal_naive` / `drift` | Baselines |
+| `EtsFit.fit(x, model, period=None)` | ETS `ANN`/`AAN`/`AAA`/`MNN` |
+| `ArimaModel.fit(x, p, d, q)` | ARIMA + `aic`/`bic`/`forecast` |
+| `ProphetStyleModel.fit(t, y, …)` | OLS Prophet-style (not Stan) |
+| `MarkovChain.fit(states, n_states)` | Discrete Markov chain |
+| `adf_test` / `kpss_test` | Stationarity |
+| `classical_decompose` | Classical seasonal decompose |
+| `acf` / `pacf` | Autocorrelation |
+
+```python
+from statscore.timeseries import drift, EtsFit, ArimaModel
+
+x = np.arange(40.0)
+print(drift(x, 5)["point"])
+print(EtsFit.fit(x, "AAN").forecast(3)["point"])
+print(ArimaModel.fit(x, 1, 1, 0).aic())
+```
+
 ## Demo
 
 ```bash
 python examples/demo_distributions.py
 python examples/demo_fuzzy.py
+python examples/demo_timeseries.py
 ```
 
 ## Benchmarks
 
 ```bash
-pip install scipy scikit-fuzzy
+pip install scipy scikit-fuzzy statsmodels
 python benches/bench_statscore_numpy.py   # absolute (scalar + ndarray)
 python benches/bench_vs_scipy.py
 python benches/bench_vs_numpy.py
 python benches/bench_vs_skfuzzy.py        # fuzzy vs scikit-fuzzy
+python benches/bench_vs_statsmodels_ts.py # timeseries vs statsmodels
 ```
 
 See [performance.md](performance.md) for recorded release numbers and interpretation.
