@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>statscore speedup 2026-08-13</title>
+<style>
+body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 2rem; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; }
+th { background: #f4f4f4; }
+caption { text-align: left; margin-bottom: 0.75rem; font-weight: 600; }
+</style></head><body>
+<table>
+<caption>statscore vs competitors — 2026-08-13 (median wall time; speedup = other/statscore; 95% bootstrap CI)</caption>
+<thead><tr><th>Op</th><th>Competitor</th><th>statscore</th><th>Other</th><th>Speedup</th><th>95% CI</th></tr></thead>
+<tbody>
+<tr><td>Normal.pdf scalar</td><td>scipy</td><td>126.0 ns</td><td>22.62 µs</td><td>179.49×</td><td>[122.68, 229.10]</td></tr>
+<tr><td>Normal.pdf array 50k</td><td>scipy</td><td>193.47 µs</td><td>910.84 µs</td><td>4.71×</td><td>[4.63, 4.84]</td></tr>
+<tr><td>Normal.cdf array 50k</td><td>scipy</td><td>529.93 µs</td><td>918.69 µs</td><td>1.73×</td><td>[1.69, 1.75]</td></tr>
+<tr><td>Gamma.cdf array 50k</td><td>scipy</td><td>1.55 ms</td><td>2.16 ms</td><td>1.39×</td><td>[1.37, 1.40]</td></tr>
+<tr><td>ETS ANN fit+fc h=24</td><td>statsmodels</td><td>2.89 µs</td><td>903.37 µs</td><td>312.26×</td><td>[295.54, 326.38]</td></tr>
+<tr><td>ARIMA(1,1,1) fit+fc</td><td>statsmodels</td><td>12.57 µs</td><td>15.74 ms</td><td>1251.49×</td><td>[1163.92, 1333.39]</td></tr>
+<tr><td>ADF maxlag=4</td><td>statsmodels</td><td>28.96 µs</td><td>309.13 µs</td><td>10.67×</td><td>[10.21, 11.66]</td></tr>
+<tr><td>decompose additive m=12</td><td>statsmodels</td><td>5.98 µs</td><td>124.47 µs</td><td>20.83×</td><td>[20.44, 21.54]</td></tr>
+</tbody></table>
+<p>Release build required. See <code>benchmarks/README.md</code> and GitHub #26 / #27.</p>
+</body></html>

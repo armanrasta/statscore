@@ -46,12 +46,26 @@ maturin develop --release
 
 ## Benchmark suite
 
-From `crates/statscore-python` (venv with `numpy`, `scipy`, release extension):
+**Public harness** (CSV + HTML + 95% CI on speedups) — see repo-root
+[`benchmarks/`](../../../benchmarks/README.md) and issues
+[#26](https://github.com/armanrasta/statscore/issues/26) /
+[#27](https://github.com/armanrasta/statscore/issues/27):
+
+```bash
+# from repo root, after maturin develop --release in crates/statscore-python
+python benchmarks/scripts/run_suite.py
+```
+
+Nightly GitHub Actions: `.github/workflows/benchmarks-nightly.yml`.
+
+Detailed crate benches (from `crates/statscore-python`, release extension):
 
 ```bash
 python benches/bench_statscore_numpy.py   # absolute timings (scalar + arrays)
 python benches/bench_vs_scipy.py          # vs SciPy
 python benches/bench_vs_numpy.py          # vs hand-rolled NumPy / Generator RNG
+python benches/bench_vs_skfuzzy.py        # vs scikit-fuzzy
+python benches/bench_vs_statsmodels_ts.py # vs statsmodels (timeseries)
 ```
 
 Rust-only Criterion (no Python):
@@ -62,7 +76,8 @@ cargo bench -p statscore-distributions
 
 ## Results (release)
 
-Median of 7 runs after 2 warmups. Speedup **> 1 ⇒.statscore faster**.
+Median of 7–11 runs after warmups. Speedup **> 1 ⇒ statscore faster**.
+Nightly suite also reports a **95% bootstrap CI** on each speedup ratio.
 
 ### Scalars vs SciPy
 
