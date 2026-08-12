@@ -7,9 +7,10 @@
 use crate::error::Result;
 
 /// Direction of the alternative hypothesis.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum Alternative {
     /// H₁: parameter ≠ null value (default).
+    #[default]
     TwoSided,
     /// H₁: parameter < null value.
     Less,
@@ -17,22 +18,15 @@ pub enum Alternative {
     Greater,
 }
 
-impl Default for Alternative {
-    fn default() -> Self {
-        Self::TwoSided
-    }
-}
+impl std::str::FromStr for Alternative {
+    type Err = String;
 
-impl Alternative {
     /// Parse from a string, accepting both formats ("two-sided" and "two_sided").
-    ///
-    /// # Errors
-    /// Returns an error string if the value is unrecognised.
-    pub fn from_str(s: &str) -> std::result::Result<Self, String> {
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s.to_lowercase().replace('-', "_").as_str() {
-            "two_sided" | "twosided" | "two"     => Ok(Self::TwoSided),
-            "less"      | "left"     | "lower"   => Ok(Self::Less),
-            "greater"   | "right"    | "upper"   => Ok(Self::Greater),
+            "two_sided" | "twosided" | "two" => Ok(Self::TwoSided),
+            "less" | "left" | "lower" => Ok(Self::Less),
+            "greater" | "right" | "upper" => Ok(Self::Greater),
             other => Err(format!(
                 "Unknown alternative '{other}'. \
                  Use 'two-sided', 'less', or 'greater'."
@@ -153,15 +147,28 @@ pub trait HypothesisTest {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn test_alternative_parse_variants() {
-        assert_eq!(Alternative::from_str("two-sided").unwrap(), Alternative::TwoSided);
-        assert_eq!(Alternative::from_str("two_sided").unwrap(), Alternative::TwoSided);
-        assert_eq!(Alternative::from_str("less").unwrap(),      Alternative::Less);
-        assert_eq!(Alternative::from_str("greater").unwrap(),   Alternative::Greater);
-        assert_eq!(Alternative::from_str("left").unwrap(),      Alternative::Less);
-        assert_eq!(Alternative::from_str("right").unwrap(),     Alternative::Greater);
+        assert_eq!(
+            Alternative::from_str("two-sided").unwrap(),
+            Alternative::TwoSided
+        );
+        assert_eq!(
+            Alternative::from_str("two_sided").unwrap(),
+            Alternative::TwoSided
+        );
+        assert_eq!(Alternative::from_str("less").unwrap(), Alternative::Less);
+        assert_eq!(
+            Alternative::from_str("greater").unwrap(),
+            Alternative::Greater
+        );
+        assert_eq!(Alternative::from_str("left").unwrap(), Alternative::Less);
+        assert_eq!(
+            Alternative::from_str("right").unwrap(),
+            Alternative::Greater
+        );
         assert!(Alternative::from_str("bad").is_err());
     }
 
@@ -175,11 +182,11 @@ mod tests {
             .with_null_value(0.0);
 
         assert!((r.statistic - 2.5).abs() < 1e-12);
-        assert!((r.pvalue   - 0.012).abs() < 1e-12);
-        assert_eq!(r.df,           Some(18.0));
-        assert_eq!(r.conf_int,     Some((0.1, 1.9)));
-        assert_eq!(r.effect_size,  Some(0.58));
-        assert_eq!(r.null_value,   Some(0.0));
+        assert!((r.pvalue - 0.012).abs() < 1e-12);
+        assert_eq!(r.df, Some(18.0));
+        assert_eq!(r.conf_int, Some((0.1, 1.9)));
+        assert_eq!(r.effect_size, Some(0.58));
+        assert_eq!(r.null_value, Some(0.0));
         assert!(r.is_significant(0.05));
         assert!(!r.is_significant(0.01));
     }

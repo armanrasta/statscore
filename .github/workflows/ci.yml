@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    name: Rust (fmt + clippy + test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: cargo fmt
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy
+        # Deny clippy lints on libs + tests (examples/benches can be noisier).
+        # Leave rustc missing_docs as warn — scaffolds are still sparse.
+        run: >
+          cargo clippy --workspace --lib --tests
+          --exclude statscore-python
+          -- -D clippy::all
+
+      - name: cargo test
+        # Skip cdylib python crate here; covered by the python job.
+        run: >
+          cargo test --workspace --all-targets
+          --exclude statscore-python
+
+  python:
+    name: Python (maturin + pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: crates/statscore-python
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            .
+            crates/statscore-python
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install maturin numpy pytest
+
+      - name: Build extension (release)
+        run: maturin develop --release
+
+      - name: pytest
+        run: pytest -q

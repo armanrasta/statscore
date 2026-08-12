@@ -1,5 +1,8 @@
 name: Benchmarks nightly
 
+# Heavy performance suite — NOT on every push (see ci.yml for tests).
+# Runs nightly + manual dispatch; uploads CSV/HTML artifacts.
+
 on:
   schedule:
     - cron: "0 3 * * *" # 03:00 UTC

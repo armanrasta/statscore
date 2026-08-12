@@ -3,11 +3,11 @@
 //! Every crate imports these instead of writing `ndarray::Array1<f64>` directly,
 //! so if we ever go generic over float type, we change one file.
 
-use ndarray::{Array1,Array2, ArrayView1, ArrayView2};
+use ndarray::{Array1, Array2, ArrayView1, ArrayView2};
 
-///! The floating-point scalar type used throughout the library.
-///!
-///! Currently `f64`. All statistical computations run in double precision.
+/// The floating-point scalar type used throughout the library.
+///
+/// Currently `f64`. All statistical computations run in double precision.
 pub type Scalar = f64;
 
 /// A 1-dimensional owned array of [`Scalar`] values.

@@ -5,12 +5,12 @@
 //!
 //! ## What lives here
 //! - [`error::StatsError`] — the single error type for all crates
-//! - [`error::Result`]    — `std::result::Result<T, StatsError>`
-//! - [`traits`]           — `ContinuousDistribution`, `DiscreteDistribution`,
-//!                          `HypothesisTest`, `TestResult`, `Alternative`, etc.
-//! - [`types`]            — `Scalar`, `Vector`, `Matrix`, `VectorView`, `MatrixView`
-//! - [`numerics`]         — `log_sum_exp`, `softmax`, `log1pexp`, `log1mexp`,
-//!                          `log_add`, `logistic`, `log_logistic`
+//! - [`error::Result`] — `std::result::Result<T, StatsError>`
+//! - [`traits`] — `ContinuousDistribution`, `DiscreteDistribution`,
+//!   `HypothesisTest`, `TestResult`, `Alternative`, etc.
+//! - [`types`] — `Scalar`, `Vector`, `Matrix`, `VectorView`, `MatrixView`
+//! - [`numerics`] — `log_sum_exp`, `softmax`, `log1pexp`, `log1mexp`,
+//!   `log_add`, `logistic`, `log_logistic`
 //!
 //! ## What does NOT live here
 //! - Special functions (gamma, beta, erf, bessel) → `statscore-special`
@@ -50,26 +50,9 @@ pub use error::{
 pub use types::{Matrix, MatrixView, Scalar, Vector, VectorView};
 
 pub use traits::{
-    Alternative,
-    ContinuousDistribution,
-    DiscreteDistribution,
-    FittableDistribution,
-    HypothesisTest,
-    IntervalEstimator,
-    MleFit,
-    ModelEstimator,
-    MomFit,
-    MultivariateContinuousDistribution,
-    PointEstimator,
-    TestResult,
+    Alternative, ContinuousDistribution, DiscreteDistribution, FittableDistribution,
+    HypothesisTest, IntervalEstimator, MleFit, ModelEstimator, MomFit,
+    MultivariateContinuousDistribution, PointEstimator, TestResult,
 };
 
-pub use numerics::{
-    log_add,
-    log1mexp,
-    log1pexp,
-    log_logistic,
-    log_sum_exp,
-    logistic,
-    softmax,
-};
+pub use numerics::{log_add, log_logistic, log_sum_exp, log1mexp, log1pexp, logistic, softmax};

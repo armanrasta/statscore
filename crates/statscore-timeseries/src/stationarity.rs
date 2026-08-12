@@ -95,11 +95,7 @@ pub fn adf_test(x: &[f64], max_lag: Option<usize>) -> Result<AdfResult> {
     let inv_col = statscore_linalg::solve::solve_linear_system(&xtx_mat, &e0)?;
     let var_gamma = sigma2 * inv_col.get(0);
     let se = var_gamma.max(0.0).sqrt();
-    let statistic = if se < 1e-15 {
-        f64::NAN
-    } else {
-        gamma / se
-    };
+    let statistic = if se < 1e-15 { f64::NAN } else { gamma / se };
 
     Ok(AdfResult {
         statistic,
@@ -172,10 +168,7 @@ pub fn kpss_test(x: &[f64], kind: KpssKind) -> Result<KpssResult> {
         });
     }
     let statistic = eta / (n as f64 * n as f64 * sigma2);
-    Ok(KpssResult {
-        statistic,
-        nobs: n,
-    })
+    Ok(KpssResult { statistic, nobs: n })
 }
 
 #[cfg(test)]

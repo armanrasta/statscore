@@ -14,7 +14,7 @@ pub(crate) fn require_pos(value: f64, name: &str) -> Result<()> {
 
 /// Validate `lo < hi` for a continuous interval support.
 pub(crate) fn require_interval(lo: f64, hi: f64) -> Result<()> {
-    if !(lo < hi) {
+    if lo.partial_cmp(&hi) != Some(std::cmp::Ordering::Less) {
         return Err(StatsError::domain(format!(
             "interval requires lo < hi, got lo={lo}, hi={hi}"
         )));

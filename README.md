@@ -2,9 +2,10 @@
 
 **Pure-Rust statistics library with Python bindings** — probability distributions, linear algebra, time series forecasting (ARIMA, ETS), and fuzzy sets. A fast, dependency-light alternative for SciPy-style work in Rust and Python.
 
+[![CI](https://github.com/armanrasta/statscore/actions/workflows/ci.yml/badge.svg)](https://github.com/armanrasta/statscore/actions/workflows/ci.yml)
+[![Benchmarks](https://github.com/armanrasta/statscore/actions/workflows/benchmarks-nightly.yml/badge.svg)](https://github.com/armanrasta/statscore/actions/workflows/benchmarks-nightly.yml)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Rust Version](https://img.shields.io/badge/rustc-1.82+-blue.svg)](https://blog.rust-lang.org/2024/10/17/Rust-1.82.0.html)
-[![Benchmarks](https://img.shields.io/badge/benchmarks-nightly%20CI-orange.svg)](benchmarks/README.md)
 
 `statscore` is a modular Rust workspace for **statistical computing** and **quantitative research**: numerically stable `pdf` / `log_pdf` / `cdf` / `ppf`, pure-Rust matrix factorizations, forecasting baselines + ETS + ARIMA, and PyO3/NumPy bindings. Default builds need **no OpenBLAS/MKL**.
 

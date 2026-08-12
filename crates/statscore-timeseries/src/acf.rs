@@ -66,9 +66,7 @@ pub fn pacf(x: &[f64], max_lag: usize) -> Result<Vec<f64>> {
             phi_new[j - 1] = phi_prev[j - 1] - pk * phi_prev[k - j - 1];
         }
         phi_new[k - 1] = pk;
-        for j in 0..k {
-            phi_prev[j] = phi_new[j];
-        }
+        phi_prev[..k].copy_from_slice(&phi_new[..k]);
     }
     Ok(phi)
 }

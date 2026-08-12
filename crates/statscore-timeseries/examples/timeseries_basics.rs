@@ -32,13 +32,17 @@ fn main() {
     );
 
     let t: Vec<f64> = (0..x.len()).map(|i| i as f64).collect();
-    let mut spec = ProphetStyleSpec::default();
-    spec.period = 12.0;
-    spec.n_changepoints = 3;
-    spec.fourier_order = 2;
+    let spec = ProphetStyleSpec {
+        period: 12.0,
+        n_changepoints: 3,
+        fourier_order: 2,
+    };
     let prophet = ProphetStyleModel::fit(&t, &x, &spec).unwrap();
     let future = vec![48.0, 49.0, 50.0];
-    println!("Prophet-style {:?}", prophet.predict(&future).unwrap().point);
+    println!(
+        "Prophet-style {:?}",
+        prophet.predict(&future).unwrap().point
+    );
 
     let adf = adf_test(&x, Some(2)).unwrap();
     let kpss = kpss_test(&x, KpssKind::Level).unwrap();
@@ -48,13 +52,13 @@ fn main() {
     );
 
     let d = classical_decompose(&x, 12, DecomposeModel::Additive).unwrap();
-    println!(
-        "decompose: seasonal[0..3]={:?}",
-        &d.seasonal[..3]
-    );
+    println!("decompose: seasonal[0..3]={:?}", &d.seasonal[..3]);
 
     let states = vec![0, 1, 0, 1, 1, 0, 0, 1];
     let mc = MarkovChain::fit(&states, 2).unwrap();
     let path = mc.sample_path(0, 8, &mut rng()).unwrap();
-    println!("Markov P[0]={:?}  sample={path:?}", mc.predict_proba(0).unwrap());
+    println!(
+        "Markov P[0]={:?}  sample={path:?}",
+        mc.predict_proba(0).unwrap()
+    );
 }

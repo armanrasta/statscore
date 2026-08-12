@@ -98,8 +98,7 @@ impl ProphetStyleModel {
         // columns: intercept, slope t, n_cp changepoint ramps, 2*n_four fourier
         let ncols = 2 + n_cp + 2 * n_four;
         let mut design = vec![0.0; n * ncols];
-        for i in 0..n {
-            let ti = t[i];
+        for (i, &ti) in t.iter().enumerate() {
             let row = i * ncols;
             design[row] = 1.0;
             design[row + 1] = ti;
@@ -121,9 +120,7 @@ impl ProphetStyleModel {
         let k0 = beta.get(0);
         let m = beta.get(1);
         let deltas: Vec<f64> = (0..n_cp).map(|i| beta.get(2 + i)).collect();
-        let fourier_coef: Vec<f64> = (0..2 * n_four)
-            .map(|i| beta.get(2 + n_cp + i))
-            .collect();
+        let fourier_coef: Vec<f64> = (0..2 * n_four).map(|i| beta.get(2 + n_cp + i)).collect();
 
         let fitted: Vec<f64> = (0..n)
             .map(|i| predict_one(t[i], k0, m, &deltas, &changepoints, &fourier_coef, spec))
@@ -207,17 +204,13 @@ mod tests {
             .iter()
             .map(|&ti| 2.0 + 0.05 * ti + (2.0 * PI * ti / 16.0).sin())
             .collect();
-        let mut spec = ProphetStyleSpec::default();
-        spec.period = 16.0;
-        spec.n_changepoints = 2;
-        spec.fourier_order = 2;
+        let spec = ProphetStyleSpec {
+            period: 16.0,
+            n_changepoints: 2,
+            fourier_order: 2,
+        };
         let m = ProphetStyleModel::fit(&t, &y, &spec).unwrap();
-        let mse: f64 = m
-            .residuals
-            .iter()
-            .map(|e| e * e)
-            .sum::<f64>()
-            / y.len() as f64;
+        let mse: f64 = m.residuals.iter().map(|e| e * e).sum::<f64>() / y.len() as f64;
         assert!(mse < 0.1, "mse={mse}");
         let f = m.predict(&[80.0]).unwrap();
         assert_relative_eq!(f.point[0], 2.0 + 0.05 * 80.0, epsilon = 1.5);

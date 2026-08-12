@@ -43,7 +43,7 @@ impl ContinuousDistribution for Beta {
     }
 
     fn log_pdf(&self, x: f64) -> f64 {
-        if x < 0.0 || x > 1.0 {
+        if !(0.0..=1.0).contains(&x) {
             return f64::NEG_INFINITY;
         }
         if x == 0.0 || x == 1.0 {
